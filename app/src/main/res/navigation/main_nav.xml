@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/homeFrag">
+    <fragment
+        android:id="@+id/homeFrag"
+        android:name="com.fruitPunchSamurai.firechat.HomeFrag"
+        android:label="home_fragment"
+        tools:layout="@layout/home_fragment">
+        <action
+            android:id="@+id/action_homeFrag_to_viewPagerFrag"
+            app:destination="@id/viewPagerFrag"
+            app:popUpTo="@id/homeFrag"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewPagerFrag"
+        android:name="com.fruitPunchSamurai.firechat.ViewPagerFrag"
+        android:label="view_pager_fragment"
+        tools:layout="@layout/view_pager_fragment" />
+</navigation>

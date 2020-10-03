@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "225852594498",
+    "firebase_url": "https://firechat-bc566.firebaseio.com",
+    "project_id": "firechat-bc566",
+    "storage_bucket": "firechat-bc566.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225852594498:android:f9bf1ad5fcec82fca710db",
+        "android_client_info": {
+          "package_name": "com.fruitPunchSamurai.firechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "225852594498-2th8qi355c6eji8n4usoekgt4112lo0j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzwnWravwACsCjSjWhZint-KLVYcQjlX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "225852594498-2th8qi355c6eji8n4usoekgt4112lo0j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
