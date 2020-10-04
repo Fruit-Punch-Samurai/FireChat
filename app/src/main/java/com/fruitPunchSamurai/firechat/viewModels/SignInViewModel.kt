@@ -4,9 +4,10 @@ import android.content.Context
 import android.text.TextUtils
 import androidx.lifecycle.ViewModel
 import com.fruitPunchSamurai.firechat.R
+import com.fruitPunchSamurai.firechat.models.CurrentUser
+import com.fruitPunchSamurai.firechat.others.MyException
+import com.fruitPunchSamurai.firechat.others.PreferencesManager
 import com.google.firebase.auth.AuthResult
-import models.CurrentUser
-import others.MyException
 
 class SignInViewModel : ViewModel() {
 
@@ -18,6 +19,7 @@ class SignInViewModel : ViewModel() {
     ): AuthResult? {
         if (CurrentUser.isLoggedIn()) CurrentUser.logOut()
         verifySignInFieldsAreNotEmpty(appContext, email, password)
+        addPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key, email)
         return CurrentUser.signIn(email, password)
     }
 
@@ -33,5 +35,12 @@ class SignInViewModel : ViewModel() {
     }
 
     private fun emailIsWellFormatted(email: String): Boolean = email.contains(Regex("@. *"))
+
+    fun getLastUserEmailPreference(): String? =
+        PreferencesManager.getPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key)
+
+    private fun addPreference(key: String, value: String) {
+        PreferencesManager.addPreference(key, value)
+    }
 
 }

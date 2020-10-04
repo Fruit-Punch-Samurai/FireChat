@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.adapters.ViewPagerAdapter
 import com.fruitPunchSamurai.firechat.databinding.ViewPagerFragmentBinding
+import com.fruitPunchSamurai.firechat.others.MyFrag
 import com.fruitPunchSamurai.firechat.viewModels.ViewPagerViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.view_pager_fragment.*

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.fruitPunchSamurai.firechat.R
+import com.fruitPunchSamurai.firechat.others.MyFrag
 import com.fruitPunchSamurai.firechat.viewModels.UsersViewModel
 
 class UsersFrag : MyFrag() {

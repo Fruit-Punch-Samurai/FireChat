@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.SignInFragmentBinding
+import com.fruitPunchSamurai.firechat.others.MyException
+import com.fruitPunchSamurai.firechat.others.MyFrag
 import com.fruitPunchSamurai.firechat.viewModels.SignInViewModel
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -14,11 +16,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.android.synthetic.main.sign_in_fragment.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import others.MyException
 
 class SignInFrag : MyFrag() {
-
-    //TODO: Remember name of last user
 
     private var b: SignInFragmentBinding? = null
 
@@ -36,14 +35,18 @@ class SignInFrag : MyFrag() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
 
-        signInBtn.setOnClickListener { signInWithEmailAndPassword() }
+        signInEmail.setText(viewModel.getLastUserEmailPreference())
+
+        signInBtn.setOnClickListener {
+            hideKeyboard()
+            makeLayoutTouchable(false)
+            signInWithEmailAndPassword()
+            makeLayoutTouchable(true)
+        }
     }
 
     private fun signInWithEmailAndPassword() {
-        hideKeyboard()
-        makeLayoutTouchable(false)
-
-        val email = signInUsername.text.toString()
+        val email = signInEmail.text.toString()
         val password = signInPassword.text.toString()
 
         GlobalScope.launch {
@@ -65,7 +68,6 @@ class SignInFrag : MyFrag() {
                 showSnackBar(R.string.undefinedError)
             }
         }
-        makeLayoutTouchable(true)
     }
 
     private fun welcomeUser(result: AuthResult) {

@@ -1,4 +1,4 @@
-package models
+package com.fruitPunchSamurai.firechat.models
 
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth

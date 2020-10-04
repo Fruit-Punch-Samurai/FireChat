@@ -1,4 +1,4 @@
-package com.fruitPunchSamurai.firechat.fragments
+package com.fruitPunchSamurai.firechat.others
 
 import android.content.Context
 import android.view.WindowManager
@@ -15,7 +15,6 @@ open class MyFrag : Fragment() {
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
         )
-
     }
 
     fun hideKeyboard() {
