@@ -1,12 +1,22 @@
 package com.fruitPunchSamurai.firechat.fragments
 
 import android.content.Context
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 
 open class MyFrag : Fragment() {
+
+    fun makeLayoutTouchable(touchable: Boolean) {
+        if (touchable) requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        else requireActivity().window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+
+    }
 
     fun hideKeyboard() {
         val imm =

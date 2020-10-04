@@ -41,6 +41,8 @@ class SignInFrag : MyFrag() {
 
     private fun signInWithEmailAndPassword() {
         hideKeyboard()
+        makeLayoutTouchable(false)
+
         val email = signInUsername.text.toString()
         val password = signInPassword.text.toString()
 
@@ -60,9 +62,10 @@ class SignInFrag : MyFrag() {
                 showSnackBar(R.string.wrongPassword)
             } catch (e: Exception) {
                 e.printStackTrace()
-                showSnackBar("Undefined Exception")
+                showSnackBar(R.string.undefinedError)
             }
         }
+        makeLayoutTouchable(true)
     }
 
     private fun welcomeUser(result: AuthResult) {
