@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.SignInFragmentBinding
 import com.fruitPunchSamurai.firechat.viewModels.SignInViewModel
-import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.android.synthetic.main.sign_in_fragment.*
@@ -17,7 +16,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import others.MyException
 
-class SignInFrag : Fragment() {
+class SignInFrag : MyFrag() {
 
     //TODO: Remember name of last user
 
@@ -43,34 +42,38 @@ class SignInFrag : Fragment() {
     private fun signInWithEmailAndPassword() {
         val email = signInUsername.text.toString()
         val password = signInPassword.text.toString()
+
         GlobalScope.launch {
             try {
                 val result = viewModel.signInWithEmailAndPassword(requireContext(), email, password)
-                if (result != null) Snackbar.make(
-                    requireView(),
-                    getString(R.string.welcome) + " ${result.user!!.email}",
-                    2000
-                ).show()
+                if (result != null) {
+                    welcomeUser(result)
+                    goToViewPagerFrag()
+                }
 
             } catch (e: MyException) {
-                e.printStackTrace()
-                Snackbar.make(requireView(), e.localizedMessage, 2000).show()
+                showSnackBar(e.localizedMessage)
             } catch (e: FirebaseAuthInvalidUserException) {
-                Snackbar.make(requireView(), getString(R.string.userNotFound), 2000).show()
+                showSnackBar(R.string.userNotFound)
             } catch (e: FirebaseAuthInvalidCredentialsException) {
-
-                if (!email.contains("@")) Snackbar.make(
-                    requireView(),
-                    getString(R.string.emailBadlyFormatted),
-                    2000
-                ).show()
-                else Snackbar.make(requireView(), getString(R.string.wrongPassword), 2000).show()
-
+                if (!emailIsWellFormatted(email)) showSnackBar(R.string.emailBadlyFormatted)
+                else showSnackBar(R.string.wrongPassword)
             } catch (e: Exception) {
                 e.printStackTrace()
-                Snackbar.make(requireView(), "Undefined Exception", 2000).show()
+                showSnackBar("Undefined Exception")
             }
         }
+    }
+
+    private fun emailIsWellFormatted(email: String): Boolean = !email.contains(Regex("@. *"))
+
+
+    private fun welcomeUser(result: AuthResult) {
+        showSnackBar(R.string.welcome, " ${result.user!!.email}")
+    }
+
+    private fun goToViewPagerFrag() {
+        navigateTo(R.id.action_signInFrag_to_viewPagerFrag)
     }
 
     override fun onDestroyView() {

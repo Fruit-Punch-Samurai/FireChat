@@ -29,5 +29,11 @@
         android:id="@+id/signInFrag"
         android:name="com.fruitPunchSamurai.firechat.fragments.SignInFrag"
         android:label="sign_in_fragment"
-        tools:layout="@layout/sign_in_fragment" />
+        tools:layout="@layout/sign_in_fragment">
+        <action
+            android:id="@+id/action_signInFrag_to_viewPagerFrag"
+            app:destination="@id/viewPagerFrag"
+            app:popUpTo="@id/signInFrag"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
