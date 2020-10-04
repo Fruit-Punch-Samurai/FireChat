@@ -29,5 +29,9 @@ class SignInViewModel : ViewModel() {
     ) {
         if (TextUtils.isEmpty(email)) throw MyException(appContext.getString(R.string.provideEmail))
         if (TextUtils.isEmpty(password)) throw MyException(appContext.getString(R.string.providePassword))
+        if (!emailIsWellFormatted(email)) throw MyException(appContext.getString(R.string.emailBadlyFormatted))
     }
+
+    private fun emailIsWellFormatted(email: String): Boolean = email.contains(Regex("@. *"))
+
 }

@@ -40,6 +40,7 @@ class SignInFrag : MyFrag() {
     }
 
     private fun signInWithEmailAndPassword() {
+        hideKeyboard()
         val email = signInUsername.text.toString()
         val password = signInPassword.text.toString()
 
@@ -56,17 +57,13 @@ class SignInFrag : MyFrag() {
             } catch (e: FirebaseAuthInvalidUserException) {
                 showSnackBar(R.string.userNotFound)
             } catch (e: FirebaseAuthInvalidCredentialsException) {
-                if (!emailIsWellFormatted(email)) showSnackBar(R.string.emailBadlyFormatted)
-                else showSnackBar(R.string.wrongPassword)
+                showSnackBar(R.string.wrongPassword)
             } catch (e: Exception) {
                 e.printStackTrace()
                 showSnackBar("Undefined Exception")
             }
         }
     }
-
-    private fun emailIsWellFormatted(email: String): Boolean = !email.contains(Regex("@. *"))
-
 
     private fun welcomeUser(result: AuthResult) {
         showSnackBar(R.string.welcome, " ${result.user!!.email}")
