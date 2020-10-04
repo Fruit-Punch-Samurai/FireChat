@@ -1,4 +1,4 @@
-package com.fruitPunchSamurai.firechat
+package com.fruitPunchSamurai.firechat.viewModels
 
 import androidx.lifecycle.ViewModel
 

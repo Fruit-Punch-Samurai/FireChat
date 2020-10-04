@@ -2,4 +2,15 @@
     <string name="app_name">FireChat</string>
     <string name="messages">Messages</string>
     <string name="users">Users</string>
+    <string name="welcome">Welcome</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="signIn">Sign In</string>
+    <string name="signUp">Sign Up</string>
+    <string name="signInFailed">Sign In failed</string>
+    <string name="provideEmail">Please provide your email</string>
+    <string name="providePassword">Please provide your password</string>
+    <string name="userNotFound">User not found</string>
+    <string name="emailBadlyFormatted">Email address badly formatted</string>
+    <string name="wrongPassword">Wrong password, or user does not have a password</string>
 </resources>

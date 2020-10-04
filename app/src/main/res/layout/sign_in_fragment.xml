@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        tools:context=".fragments.SignInFrag">
+
+        <EditText
+            android:id="@+id/signInUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/email"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/signInPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/signInBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/signIn" />
+
+        <TextView
+            android:id="@+id/signUpTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/signUp"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+</layout>

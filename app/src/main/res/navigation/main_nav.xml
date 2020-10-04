@@ -6,7 +6,7 @@
     app:startDestination="@id/homeFrag">
     <fragment
         android:id="@+id/homeFrag"
-        android:name="com.fruitPunchSamurai.firechat.HomeFrag"
+        android:name="com.fruitPunchSamurai.firechat.fragments.HomeFrag"
         android:label="home_fragment"
         tools:layout="@layout/home_fragment">
         <action
@@ -14,10 +14,20 @@
             app:destination="@id/viewPagerFrag"
             app:popUpTo="@id/homeFrag"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_homeFrag_to_signInFrag"
+            app:destination="@id/signInFrag"
+            app:popUpTo="@id/homeFrag"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/viewPagerFrag"
-        android:name="com.fruitPunchSamurai.firechat.ViewPagerFrag"
+        android:name="com.fruitPunchSamurai.firechat.fragments.ViewPagerFrag"
         android:label="view_pager_fragment"
         tools:layout="@layout/view_pager_fragment" />
+    <fragment
+        android:id="@+id/signInFrag"
+        android:name="com.fruitPunchSamurai.firechat.fragments.SignInFrag"
+        android:label="sign_in_fragment"
+        tools:layout="@layout/sign_in_fragment" />
 </navigation>

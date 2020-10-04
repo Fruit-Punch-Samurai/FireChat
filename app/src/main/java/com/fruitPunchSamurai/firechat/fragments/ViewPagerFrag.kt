@@ -1,4 +1,4 @@
-package com.fruitPunchSamurai.firechat
+package com.fruitPunchSamurai.firechat.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.adapters.ViewPagerAdapter
 import com.fruitPunchSamurai.firechat.databinding.ViewPagerFragmentBinding
+import com.fruitPunchSamurai.firechat.viewModels.ViewPagerViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.view_pager_fragment.*
 
@@ -43,14 +45,13 @@ class ViewPagerFrag : MyFrag() {
 
         viewPager.adapter = ViewPagerAdapter(fragments, parentFragmentManager, lifecycle)
         viewPager.offscreenPageLimit = 2
-
     }
 
     private fun initiateTabLayout() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = "Messages"
-                1 -> tab.text = "Users"
+                0 -> tab.text = getString(R.string.messages)
+                1 -> tab.text = getString(R.string.users)
             }
         }.attach()
     }

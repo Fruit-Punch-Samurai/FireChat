@@ -1,4 +1,4 @@
-package com.fruitPunchSamurai.firechat
+package com.fruitPunchSamurai.firechat.fragments
 
 import android.os.Bundle
 import android.os.Handler
@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.HomeFragmentBinding
 import com.fruitPunchSamurai.firechat.viewModels.HomeViewModel
+import models.CurrentUser
 
 class HomeFrag : MyFrag() {
 
@@ -34,7 +36,10 @@ class HomeFrag : MyFrag() {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         Handler().postDelayed(
-            { findNavController().navigate(R.id.action_homeFrag_to_viewPagerFrag) },
+            {
+                if (CurrentUser.isLoggedIn()) findNavController().navigate(R.id.action_homeFrag_to_viewPagerFrag)
+                else findNavController().navigate(R.id.action_homeFrag_to_signInFrag)
+            },
             3000
         )
     }
