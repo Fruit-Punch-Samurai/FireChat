@@ -1,36 +1,28 @@
 package com.fruitPunchSamurai.firechat.viewModels
 
-import android.content.Context
-import android.text.TextUtils
-import androidx.lifecycle.ViewModel
+import android.app.Application
 import com.fruitPunchSamurai.firechat.R
+import com.fruitPunchSamurai.firechat.others.MyAndroidViewModel
 import com.fruitPunchSamurai.firechat.others.MyException
 import com.fruitPunchSamurai.firechat.others.PreferencesManager
 import com.fruitPunchSamurai.firechat.repos.AuthRepo
 import com.google.firebase.auth.AuthResult
 
-class SignInViewModel : ViewModel() {
+class SignInViewModel(application: Application) : MyAndroidViewModel(application) {
 
-    suspend fun signInWithEmailAndPassword(
-        appContext: Context,
-        email: String,
-        password: String
-    ): AuthResult? {
+    suspend fun signInWithEmailAndPassword(email: String, password: String): AuthResult? {
         if (AuthRepo.isLoggedIn()) AuthRepo.logOut()
-        verifySignInFieldsAreNotEmpty(appContext, email, password)
+
+        verifySignInFieldsAreNotEmpty(email, password)
         addPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key, email)
         return AuthRepo.signIn(email, password)
     }
 
     @Throws(MyException::class)
-    private fun verifySignInFieldsAreNotEmpty(
-        appContext: Context,
-        email: String,
-        password: String
-    ) {
-        if (TextUtils.isEmpty(email)) throw MyException(appContext.getString(R.string.provideEmail))
-        if (TextUtils.isEmpty(password)) throw MyException(appContext.getString(R.string.providePassword))
-        if (!emailIsWellFormatted(email)) throw MyException(appContext.getString(R.string.emailBadlyFormatted))
+    private fun verifySignInFieldsAreNotEmpty(email: String, password: String) {
+        if (email.isBlank()) throw MyException(getString(R.string.provideEmail))
+        if (password.isBlank()) throw MyException(getString(R.string.providePassword))
+        if (!emailIsWellFormatted(email)) throw MyException(getString(R.string.emailBadlyFormatted))
     }
 
     private fun emailIsWellFormatted(email: String): Boolean = email.contains(Regex("@. *"))

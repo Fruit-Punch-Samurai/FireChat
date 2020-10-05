@@ -32,4 +32,5 @@ object PreferencesManager {
     fun addPreference(key: String, value: String) {
         getAllPreferences().edit().putString(key, value).apply()
     }
+
 }

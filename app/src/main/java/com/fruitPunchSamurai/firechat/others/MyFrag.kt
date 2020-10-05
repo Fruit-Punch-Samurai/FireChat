@@ -1,5 +1,6 @@
 package com.fruitPunchSamurai.firechat.others
 
+import android.app.Application
 import android.content.Context
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -8,6 +9,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 
 open class MyFrag : Fragment() {
+
+    val application: Application
+        get() = requireActivity().application
 
     fun makeLayoutTouchable(touchable: Boolean) {
         if (touchable) requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)

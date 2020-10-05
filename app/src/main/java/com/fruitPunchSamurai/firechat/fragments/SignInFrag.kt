@@ -33,7 +33,8 @@ class SignInFrag : MyFrag() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
+        viewModel = ViewModelProvider.AndroidViewModelFactory(application)
+            .create(SignInViewModel::class.java)
 
         b?.viewModel = viewModel
         b?.frag = this
@@ -49,7 +50,7 @@ class SignInFrag : MyFrag() {
         MainScope().launch {
             try {
                 val authResult =
-                    viewModel.signInWithEmailAndPassword(requireContext(), email, password)
+                    viewModel.signInWithEmailAndPassword(email, password)
                 if (authResult != null) {
                     welcomeUser(authResult)
                     goToViewPagerFrag()
