@@ -15,7 +15,6 @@ object PreferencesManager {
     /**Gets the context of the app, Must be called at app start*/
     fun initialize(context: Context) {
         this.context = context
-        println("All Prefs: ${getAllPreferences().all}")
         getPreference("lastUserEmail")
     }
 

@@ -14,7 +14,6 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import kotlinx.android.synthetic.main.sign_in_fragment.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -36,21 +35,21 @@ class SignInFrag : MyFrag() {
         viewModel = ViewModelProvider.AndroidViewModelFactory(application)
             .create(SignInViewModel::class.java)
 
+        viewModel.getLastUserEmailPreference()
+
         b?.viewModel = viewModel
         b?.frag = this
+
     }
 
     fun signInWithEmailAndPassword() {
         hideKeyboard()
         makeLayoutTouchable(false)
 
-        val email = signInEmail.text.toString()
-        val password = signInPassword.text.toString()
-
         MainScope().launch {
             try {
                 val authResult =
-                    viewModel.signInWithEmailAndPassword(email, password)
+                    viewModel.signInWithEmailAndPassword()
                 if (authResult != null) {
                     welcomeUser(authResult)
                     goToViewPagerFrag()

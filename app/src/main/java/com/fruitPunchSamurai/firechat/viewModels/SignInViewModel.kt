@@ -10,25 +10,31 @@ import com.google.firebase.auth.AuthResult
 
 class SignInViewModel(application: Application) : MyAndroidViewModel(application) {
 
-    suspend fun signInWithEmailAndPassword(email: String, password: String): AuthResult? {
+    var email: String = ""
+    var password: String = ""
+
+    suspend fun signInWithEmailAndPassword(): AuthResult? {
+        println(email)
+        println(password)
         if (AuthRepo.isLoggedIn()) AuthRepo.logOut()
 
-        verifySignInFieldsAreNotEmpty(email, password)
+        verifySignInFieldsAreNotEmpty()
         addPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key, email)
         return AuthRepo.signIn(email, password)
     }
 
     @Throws(MyException::class)
-    private fun verifySignInFieldsAreNotEmpty(email: String, password: String) {
+    private fun verifySignInFieldsAreNotEmpty() {
         if (email.isBlank()) throw MyException(getString(R.string.provideEmail))
         if (password.isBlank()) throw MyException(getString(R.string.providePassword))
-        if (!emailIsWellFormatted(email)) throw MyException(getString(R.string.emailBadlyFormatted))
+        if (!emailIsWellFormatted()) throw MyException(getString(R.string.emailBadlyFormatted))
     }
 
-    private fun emailIsWellFormatted(email: String): Boolean = email.contains(Regex("@. *"))
+    private fun emailIsWellFormatted(): Boolean = email.contains(Regex("@. *"))
 
-    fun getLastUserEmailPreference(): String? =
-        PreferencesManager.getPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key)
+    fun getLastUserEmailPreference() {
+        email = PreferencesManager.getPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key) ?: ""
+    }
 
     private fun addPreference(key: String, value: String) {
         PreferencesManager.addPreference(key, value)
