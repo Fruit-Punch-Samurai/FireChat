@@ -6,21 +6,38 @@ import com.fruitPunchSamurai.firechat.others.MyAndroidViewModel
 import com.fruitPunchSamurai.firechat.others.MyException
 import com.fruitPunchSamurai.firechat.others.PreferencesManager
 import com.fruitPunchSamurai.firechat.repos.AuthRepo
-import com.google.firebase.auth.AuthResult
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 
 class SignInViewModel(application: Application) : MyAndroidViewModel(application) {
 
     var email: String = ""
     var password: String = ""
 
-    suspend fun signInWithEmailAndPassword(): AuthResult? {
-        println(email)
-        println(password)
-        if (AuthRepo.isLoggedIn()) AuthRepo.logOut()
+    @Throws(MyException::class)
+    suspend fun signInWithEmailAndPassword(): String? {
+        try {
+            verifySignInFieldsAreNotEmpty()
+            addPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key, email)
 
-        verifySignInFieldsAreNotEmpty()
-        addPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key, email)
-        return AuthRepo.signIn(email, password)
+            val authResult = AuthRepo.signIn(email, password)
+
+            if (authResult != null) return authResult.user?.email
+            else throw MyException(getString(R.string.loginFailed))
+
+        } catch (e: MyException) {
+            throw MyException(e.localizedMessage)
+        } catch (e: FirebaseAuthInvalidUserException) {
+            throw MyException(getString(R.string.userNotFound))
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+            throw MyException(getString(R.string.wrongPassword))
+        } catch (e: FirebaseTooManyRequestsException) {
+            throw MyException(getString(R.string.tooManyFailedLoginAttempts))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw MyException(getString(R.string.undefinedError))
+        }
     }
 
     @Throws(MyException::class)

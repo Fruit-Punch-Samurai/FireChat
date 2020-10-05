@@ -10,10 +10,6 @@ import com.fruitPunchSamurai.firechat.databinding.SignInFragmentBinding
 import com.fruitPunchSamurai.firechat.others.MyException
 import com.fruitPunchSamurai.firechat.others.MyFrag
 import com.fruitPunchSamurai.firechat.viewModels.SignInViewModel
-import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -48,32 +44,22 @@ class SignInFrag : MyFrag() {
 
         MainScope().launch {
             try {
-                val authResult =
-                    viewModel.signInWithEmailAndPassword()
-                if (authResult != null) {
-                    welcomeUser(authResult)
+                val result = viewModel.signInWithEmailAndPassword()
+                if (result != null) {
+                    welcomeUser(result)
                     goToViewPagerFrag()
                 }
 
             } catch (e: MyException) {
                 showSnackBar(e.localizedMessage)
-            } catch (e: FirebaseAuthInvalidUserException) {
-                showSnackBar(R.string.userNotFound)
-            } catch (e: FirebaseAuthInvalidCredentialsException) {
-                showSnackBar(R.string.wrongPassword)
-            } catch (e: FirebaseTooManyRequestsException) {
-                showSnackBar(R.string.tooManyFailedLoginAttempts)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                showSnackBar(R.string.undefinedError)
             }
             makeLayoutTouchable(true)
 
         }
     }
 
-    private fun welcomeUser(result: AuthResult) {
-        showSnackBar(R.string.welcome, " ${result.user!!.email}")
+    private fun welcomeUser(email: String) {
+        showSnackBar(R.string.welcome, " $email")
     }
 
     private fun goToViewPagerFrag() {

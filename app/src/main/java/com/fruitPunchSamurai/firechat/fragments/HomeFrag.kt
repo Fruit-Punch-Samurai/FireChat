@@ -41,7 +41,7 @@ class HomeFrag : MyFrag() {
                 if (AuthRepo.isLoggedIn()) findNavController().navigate(R.id.action_homeFrag_to_viewPagerFrag)
                 else findNavController().navigate(R.id.action_homeFrag_to_signInFrag)
             },
-            3000
+            2000
         )
     }
 

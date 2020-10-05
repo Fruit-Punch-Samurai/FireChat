@@ -13,6 +13,7 @@
     <string name="providePassword">Please provide your password</string>
     <string name="userNotFound">User not found</string>
     <string name="emailBadlyFormatted">Email address badly formatted</string>
+    <string name="loginFailed">Login failed</string>
     <string name="wrongPassword">Wrong password, or user does not have a password</string>
     <string name="tooManyFailedLoginAttempts">Sign in blocked due to many failed login attempts, try again later</string>
     <string name="preference_file_name">com.fruitPunchSamurai.fireChat.prefs</string>
