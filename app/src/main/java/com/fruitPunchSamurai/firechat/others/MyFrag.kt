@@ -27,12 +27,13 @@ open class MyFrag : Fragment() {
         Snackbar.make(requireView(), msg, 2000).show()
     }
 
+    /**Shows a Snackbar with the message "[getString(resID)]" */
     fun showSnackBar(resID: Int) {
         val msg = getString(resID)
         showSnackBar(msg)
     }
 
-    /**Shows a Snackbar with the message "getString([resID]) + [msg]" */
+    /**Shows a Snackbar with the message "[getString(resID)] + [msg]" */
     fun showSnackBar(resID: Int, msg: String) {
         val finalMessage = getString(resID) + msg
         showSnackBar(finalMessage)

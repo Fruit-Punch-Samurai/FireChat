@@ -10,11 +10,12 @@ import com.fruitPunchSamurai.firechat.databinding.SignInFragmentBinding
 import com.fruitPunchSamurai.firechat.others.MyException
 import com.fruitPunchSamurai.firechat.others.MyFrag
 import com.fruitPunchSamurai.firechat.viewModels.SignInViewModel
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.android.synthetic.main.sign_in_fragment.*
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class SignInFrag : MyFrag() {
@@ -24,8 +25,7 @@ class SignInFrag : MyFrag() {
     private lateinit var viewModel: SignInViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         b = SignInFragmentBinding.inflate(layoutInflater, container, false)
         return b?.root
@@ -35,25 +35,23 @@ class SignInFrag : MyFrag() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
 
-        signInEmail.setText(viewModel.getLastUserEmailPreference())
-
-        signInBtn.setOnClickListener {
-            hideKeyboard()
-            makeLayoutTouchable(false)
-            signInWithEmailAndPassword()
-            makeLayoutTouchable(true)
-        }
+        b?.viewModel = viewModel
+        b?.frag = this
     }
 
-    private fun signInWithEmailAndPassword() {
+    fun signInWithEmailAndPassword() {
+        hideKeyboard()
+        makeLayoutTouchable(false)
+
         val email = signInEmail.text.toString()
         val password = signInPassword.text.toString()
 
-        GlobalScope.launch {
+        MainScope().launch {
             try {
-                val result = viewModel.signInWithEmailAndPassword(requireContext(), email, password)
-                if (result != null) {
-                    welcomeUser(result)
+                val authResult =
+                    viewModel.signInWithEmailAndPassword(requireContext(), email, password)
+                if (authResult != null) {
+                    welcomeUser(authResult)
                     goToViewPagerFrag()
                 }
 
@@ -63,10 +61,14 @@ class SignInFrag : MyFrag() {
                 showSnackBar(R.string.userNotFound)
             } catch (e: FirebaseAuthInvalidCredentialsException) {
                 showSnackBar(R.string.wrongPassword)
+            } catch (e: FirebaseTooManyRequestsException) {
+                showSnackBar(R.string.tooManyFailedLoginAttempts)
             } catch (e: Exception) {
                 e.printStackTrace()
                 showSnackBar(R.string.undefinedError)
             }
+            makeLayoutTouchable(true)
+
         }
     }
 

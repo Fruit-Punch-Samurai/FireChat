@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="androidx.lifecycle.ViewModel" />
+            type="com.fruitPunchSamurai.firechat.viewModels.SignInViewModel" />
+
+        <variable
+            name="frag"
+            type="com.fruitPunchSamurai.firechat.fragments.SignInFrag" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
@@ -19,13 +23,13 @@
 
         <EditText
             android:id="@+id/signInEmail"
-            android:inputType="textEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/email"
             android:importantForAutofill="no"
-            android:text="" />
+            android:inputType="textEmailAddress"
+            android:text="@{viewModel.lastUserEmailPreference}" />
 
         <EditText
             android:id="@+id/signInPassword"
@@ -40,6 +44,7 @@
             android:id="@+id/signInBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> frag.signInWithEmailAndPassword()}"
             android:text="@string/signIn" />
 
         <TextView

@@ -1,10 +1,10 @@
-package com.fruitPunchSamurai.firechat.models
+package com.fruitPunchSamurai.firechat.repos
 
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 
-object CurrentUser {
+object AuthRepo {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
