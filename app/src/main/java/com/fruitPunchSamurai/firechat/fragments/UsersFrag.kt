@@ -1,11 +1,9 @@
 package com.fruitPunchSamurai.firechat.fragments
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
-import com.fruitPunchSamurai.firechat.R
+import androidx.fragment.app.viewModels
+import com.fruitPunchSamurai.firechat.databinding.UsersFragmentBinding
 import com.fruitPunchSamurai.firechat.others.MyFrag
 import com.fruitPunchSamurai.firechat.viewModels.UsersViewModel
 
@@ -15,18 +13,11 @@ class UsersFrag : MyFrag() {
         fun newInstance() = UsersFrag()
     }
 
-    private lateinit var viewModel: UsersViewModel
+    private val vm: UsersViewModel by viewModels()
+    private var b: UsersFragmentBinding? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.users_fragment, container, false)
+    override fun initiateDataBinder(container: ViewGroup?): View? {
+        b = UsersFragmentBinding.inflate(layoutInflater, container, false)
+        return b?.root
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(UsersViewModel::class.java)
-    }
-
 }

@@ -1,10 +1,9 @@
 package com.fruitPunchSamurai.firechat.fragments
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.SignInFragmentBinding
 import com.fruitPunchSamurai.firechat.others.MyException
@@ -16,26 +15,37 @@ import kotlinx.coroutines.launch
 class SignInFrag : MyFrag() {
 
     private var b: SignInFragmentBinding? = null
+    private val vm: SignInViewModel by viewModels()
 
-    private lateinit var viewModel: SignInViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        b = SignInFragmentBinding.inflate(layoutInflater, container, false)
+    override fun initiateDataBinder(container: ViewGroup?): View? {
+        b = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.sign_in_fragment,
+            container,
+            false
+        ) as SignInFragmentBinding
+//        b = SignInFragmentBinding.inflate(layoutInflater, container, false)
+        b?.lifecycleOwner = viewLifecycleOwner
+        b?.viewModel = vm
         return b?.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider.AndroidViewModelFactory(application)
-            .create(SignInViewModel::class.java)
-
-        viewModel.getLastUserEmailPreference()
-
-        b?.viewModel = viewModel
+    override fun bindData() {
+        b?.viewModel = vm
         b?.frag = this
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        b = null
+    }
+
+    private fun welcomeUser(email: String) {
+        showSnackBar(R.string.welcome, " $email")
+    }
+
+    private fun goToViewPagerFrag() {
+        navigateTo(R.id.action_signInFrag_to_viewPagerFrag)
     }
 
     fun signInWithEmailAndPassword() {
@@ -44,7 +54,7 @@ class SignInFrag : MyFrag() {
 
         MainScope().launch {
             try {
-                val result = viewModel.signInWithEmailAndPassword()
+                val result = vm.signInWithEmailAndPassword()
                 if (result != null) {
                     welcomeUser(result)
                     goToViewPagerFrag()
@@ -56,18 +66,5 @@ class SignInFrag : MyFrag() {
             makeLayoutTouchable(true)
 
         }
-    }
-
-    private fun welcomeUser(email: String) {
-        showSnackBar(R.string.welcome, " $email")
-    }
-
-    private fun goToViewPagerFrag() {
-        navigateTo(R.id.action_signInFrag_to_viewPagerFrag)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        b = null
     }
 }

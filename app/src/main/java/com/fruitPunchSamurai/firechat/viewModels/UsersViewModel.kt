@@ -1,6 +1,7 @@
 package com.fruitPunchSamurai.firechat.viewModels
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import com.fruitPunchSamurai.firechat.others.MyAndroidViewModel
 
-class UsersViewModel : ViewModel() {
+class UsersViewModel(application: Application) : MyAndroidViewModel(application) {
 }

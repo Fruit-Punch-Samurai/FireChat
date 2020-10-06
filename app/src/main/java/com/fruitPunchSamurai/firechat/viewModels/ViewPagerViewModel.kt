@@ -1,6 +1,8 @@
 package com.fruitPunchSamurai.firechat.viewModels
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import com.fruitPunchSamurai.firechat.others.MyAndroidViewModel
 
-class ViewPagerViewModel : ViewModel() {
+class ViewPagerViewModel(application: Application) : MyAndroidViewModel(application) {
+
 }

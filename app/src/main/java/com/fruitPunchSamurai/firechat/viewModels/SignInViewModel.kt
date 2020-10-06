@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 
 class SignInViewModel(application: Application) : MyAndroidViewModel(application) {
 
-    var email: String = ""
+    var email: String = getLastUserEmailPreference()
     var password: String = ""
 
     @Throws(MyException::class)
@@ -49,9 +49,9 @@ class SignInViewModel(application: Application) : MyAndroidViewModel(application
 
     private fun emailIsWellFormatted(): Boolean = email.contains(Regex("@. *"))
 
-    fun getLastUserEmailPreference() {
-        email = PreferencesManager.getPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key) ?: ""
-    }
+    private fun getLastUserEmailPreference() =
+        PreferencesManager.getPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key) ?: ""
+
 
     private fun addPreference(key: String, value: String) {
         PreferencesManager.addPreference(key, value)

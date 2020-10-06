@@ -1,6 +1,11 @@
 package com.fruitPunchSamurai.firechat.viewModels
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import com.fruitPunchSamurai.firechat.others.MyAndroidViewModel
+import com.fruitPunchSamurai.firechat.repos.AuthRepo
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(application: Application) : MyAndroidViewModel(application) {
+
+    fun userIsLoggedIn() = AuthRepo.isLoggedIn()
+
 }
