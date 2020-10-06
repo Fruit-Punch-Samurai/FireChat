@@ -23,7 +23,7 @@ class HomeFrag : MyFrag() {
                 if (vm.userIsLoggedIn()) navigateTo(R.id.action_homeFrag_to_viewPagerFrag)
                 else navigateTo(R.id.action_homeFrag_to_signInFrag)
             },
-            2000
+            1000
         )
     }
 

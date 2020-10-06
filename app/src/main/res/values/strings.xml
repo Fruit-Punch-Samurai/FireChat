@@ -5,13 +5,17 @@
     <string name="welcome">Welcome</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="confirmYourPassword">Confirm your password</string>
     <string name="signIn">Sign In</string>
     <string name="signUp">Sign Up</string>
     <string name="signInFailed">Sign In failed</string>
     <string name="provideEmail">Please provide your email</string>
     <string name="undefinedError">Undefined Error</string>
     <string name="providePassword">Please provide your password</string>
+    <string name="pleaseConfirmPassword">Please confirm your password</string>
+    <string name="yourUsernameWillBe">Your username will be:</string>
     <string name="userNotFound">User not found</string>
+    <string name="cancel">Cancel</string>
     <string name="unknownUser">Unknown user</string>
     <string name="emailBadlyFormatted">Email address badly formatted</string>
     <string name="loginFailed">Login failed</string>

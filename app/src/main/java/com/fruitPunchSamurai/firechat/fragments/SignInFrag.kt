@@ -24,7 +24,6 @@ class SignInFrag : MyFrag() {
             container,
             false
         ) as SignInFragmentBinding
-//        b = SignInFragmentBinding.inflate(layoutInflater, container, false)
         b?.lifecycleOwner = viewLifecycleOwner
         b?.viewModel = vm
         return b?.root
@@ -46,6 +45,10 @@ class SignInFrag : MyFrag() {
 
     private fun goToViewPagerFrag() {
         navigateTo(R.id.action_signInFrag_to_viewPagerFrag)
+    }
+
+    fun goToSignUp() {
+        navigateTo(R.id.action_signInFrag_to_signUpFrag)
     }
 
     fun signInWithEmailAndPassword() {

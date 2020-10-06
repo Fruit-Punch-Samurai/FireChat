@@ -52,6 +52,7 @@
             android:id="@+id/signUpTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> frag.goToSignUp()}"
             android:text="@string/signUp"
             android:textAlignment="center" />
 

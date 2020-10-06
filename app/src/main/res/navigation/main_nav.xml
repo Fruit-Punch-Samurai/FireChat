@@ -35,5 +35,13 @@
             app:destination="@id/viewPagerFrag"
             app:popUpTo="@id/signInFrag"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_signInFrag_to_signUpFrag"
+            app:destination="@id/signUpFrag"
+            app:popUpTo="@id/signInFrag" />
     </fragment>
+    <fragment
+        android:id="@+id/signUpFrag"
+        android:name="com.fruitPunchSamurai.firechat.fragments.SignUpFrag"
+        android:label="SignUpFrag" />
 </navigation>
