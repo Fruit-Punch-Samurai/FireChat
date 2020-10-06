@@ -54,9 +54,9 @@ class SignInFrag : MyFrag() {
 
         MainScope().launch {
             try {
-                val result = vm.signInWithEmailAndPassword()
-                if (result != null) {
-                    welcomeUser(result)
+                val username = vm.signInWithEmailAndPassword()
+                if (username != null) {
+                    welcomeUser(username)
                     goToViewPagerFrag()
                 }
 

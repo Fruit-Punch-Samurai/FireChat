@@ -12,6 +12,7 @@
     <string name="undefinedError">Undefined Error</string>
     <string name="providePassword">Please provide your password</string>
     <string name="userNotFound">User not found</string>
+    <string name="unknownUser">Unknown user</string>
     <string name="emailBadlyFormatted">Email address badly formatted</string>
     <string name="loginFailed">Login failed</string>
     <string name="wrongPassword">Wrong password, or user does not have a password</string>

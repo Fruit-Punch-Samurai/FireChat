@@ -15,6 +15,7 @@ class SignInViewModel(application: Application) : MyAndroidViewModel(application
     var email: String = getLastUserEmailPreference()
     var password: String = ""
 
+    /** Sign in and return the username if the operation succeds*/
     @Throws(MyException::class)
     suspend fun signInWithEmailAndPassword(): String? {
         try {
@@ -23,7 +24,7 @@ class SignInViewModel(application: Application) : MyAndroidViewModel(application
 
             val authResult = AuthRepo.signIn(email, password)
 
-            if (authResult != null) return authResult.user?.email
+            if (authResult != null) return getUsernameFromEmail(authResult.user?.email)
             else throw MyException(getString(R.string.loginFailed))
 
         } catch (e: MyException) {
@@ -47,7 +48,11 @@ class SignInViewModel(application: Application) : MyAndroidViewModel(application
         if (!emailIsWellFormatted()) throw MyException(getString(R.string.emailBadlyFormatted))
     }
 
-    private fun emailIsWellFormatted(): Boolean = email.contains(Regex("@. *"))
+    private fun getUsernameFromEmail(fullEmail: String?) =
+        fullEmail?.substringBefore("@") ?: getString(R.string.unknownUser)
+
+
+    private fun emailIsWellFormatted() = email.contains(Regex("@. *"))
 
     private fun getLastUserEmailPreference() =
         PreferencesManager.getPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key) ?: ""

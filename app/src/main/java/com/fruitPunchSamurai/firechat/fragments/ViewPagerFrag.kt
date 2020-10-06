@@ -38,7 +38,7 @@ class ViewPagerFrag : MyFrag() {
         fragments.add(MessagesFrag.newInstance())
         fragments.add(UsersFrag.newInstance())
 
-        viewPager.adapter = ViewPagerAdapter(fragments, parentFragmentManager, lifecycle)
+        viewPager.adapter = ViewPagerAdapter(fragments, childFragmentManager, lifecycle)
         viewPager.offscreenPageLimit = 2
     }
 
