@@ -15,22 +15,19 @@ class SignInViewModel(application: Application) : MyAndroidViewModel(application
     var email: String = getLastUserEmailPreference()
     var password: String = ""
 
-    /** Sign in and return the username if the operation succeds*/
+    /** Sign in and return the username if the operation succeeds*/
     @Throws(MyException::class)
     suspend fun signInWithEmailAndPassword(): String? {
+        verifySignInFieldsAreNotEmpty()
         try {
-            verifySignInFieldsAreNotEmpty()
             addPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key, email)
 
             val authResult = AuthRepo.signIn(email, password)
 
-            if (authResult != null) return getUsernameFromEmail(authResult.user?.email)
-            else throw MyException(getString(R.string.loginFailed))
+            return getUsernameFromEmail(authResult.user?.email)
 
-        } catch (e: MyException) {
-            throw MyException(e.localizedMessage)
         } catch (e: FirebaseAuthInvalidUserException) {
-            throw MyException(getString(R.string.userNotFound))
+            throw MyException(getString(R.string.userNotFoundOrDisabled))
         } catch (e: FirebaseAuthInvalidCredentialsException) {
             throw MyException(getString(R.string.wrongPassword))
         } catch (e: FirebaseTooManyRequestsException) {

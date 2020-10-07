@@ -12,9 +12,14 @@
     <string name="provideEmail">Please provide your email</string>
     <string name="undefinedError">Undefined Error</string>
     <string name="providePassword">Please provide your password</string>
+    <string name="chooseStrongerPassword">Please choose a stronger password</string>
+    <string name="emailAddressTaken">Email address already taken</string>
+    <string name="invalidCredentials">Invalid credentials</string>
+    <string name="noNetworkConnection">No network connection</string>
     <string name="pleaseConfirmPassword">Please confirm your password</string>
     <string name="yourUsernameWillBe">Your username will be:</string>
-    <string name="userNotFound">User not found</string>
+    <string name="userNotFoundOrDisabled">User account not found or disabled</string>
+    <string name="Logout">Logout</string>
     <string name="cancel">Cancel</string>
     <string name="unknownUser">Unknown user</string>
     <string name="emailBadlyFormatted">Email address badly formatted</string>

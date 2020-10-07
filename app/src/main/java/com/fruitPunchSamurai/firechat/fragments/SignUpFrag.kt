@@ -8,9 +8,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.SignUpFragmentBinding
+import com.fruitPunchSamurai.firechat.others.MyException
 import com.fruitPunchSamurai.firechat.others.MyFrag
 import com.fruitPunchSamurai.firechat.viewModels.SignUpViewModel
-import java.util.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class SignUpFrag : MyFrag() {
 
@@ -46,13 +48,29 @@ class SignUpFrag : MyFrag() {
 
     private fun observeEmailChanges() {
         vm.email.observe(viewLifecycleOwner, {
-            val username = vm.getUsernameFromEmail().capitalize(Locale.getDefault())
+            val username = vm.getUsernameFromEmail()
             val sentence = getString(R.string.yourUsernameWillBe)
             vm.usernameSentence.value = "$sentence $username"
         })
     }
 
     fun signUp() {
+        hideKeyboard()
+        makeLayoutTouchable(false)
+        MainScope().launch {
+            try {
+                val username = vm.signUp()
+                showSnackBar("${getString(R.string.welcome)} $username")
+                goToViewPagerFrag()
+            } catch (e: MyException) {
+                showSnackBar(e.message)
+            }
+            makeLayoutTouchable(true)
+        }
+    }
+
+    private fun goToViewPagerFrag() {
+        navigateTo(R.id.action_signUpFrag_to_viewPagerFrag)
 
     }
 

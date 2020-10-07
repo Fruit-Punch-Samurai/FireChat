@@ -9,6 +9,8 @@ private lateinit var b: ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    //TODO: Motion layout and Instant Modules
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

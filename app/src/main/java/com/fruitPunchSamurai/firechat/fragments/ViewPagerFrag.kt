@@ -9,9 +9,9 @@ import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.adapters.ViewPagerAdapter
 import com.fruitPunchSamurai.firechat.databinding.ViewPagerFragmentBinding
 import com.fruitPunchSamurai.firechat.others.MyFrag
+import com.fruitPunchSamurai.firechat.repos.AuthRepo
 import com.fruitPunchSamurai.firechat.viewModels.ViewPagerViewModel
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.view_pager_fragment.*
 
 class ViewPagerFrag : MyFrag() {
 
@@ -26,6 +26,8 @@ class ViewPagerFrag : MyFrag() {
         super.onActivityCreated(savedInstanceState)
         initiateViewPager()
         initiateTabLayout()
+        println(AuthRepo.getUsername())
+
     }
 
     override fun initiateDataBinder(container: ViewGroup?): View? {
@@ -33,17 +35,22 @@ class ViewPagerFrag : MyFrag() {
         return b?.root
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        b = null
+    }
+
     private fun initiateViewPager() {
         val fragments = ArrayList<Fragment>()
         fragments.add(MessagesFrag.newInstance())
         fragments.add(UsersFrag.newInstance())
 
-        viewPager.adapter = ViewPagerAdapter(fragments, childFragmentManager, lifecycle)
-        viewPager.offscreenPageLimit = 2
+        b?.viewPager?.adapter = ViewPagerAdapter(fragments, childFragmentManager, lifecycle)
+        b?.viewPager?.offscreenPageLimit = 2
     }
 
     private fun initiateTabLayout() {
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+        TabLayoutMediator(b!!.tabLayout, b!!.viewPager) { tab, position ->
             when (position) {
                 0 -> tab.text = getString(R.string.messages)
                 1 -> tab.text = getString(R.string.users)
@@ -51,8 +58,5 @@ class ViewPagerFrag : MyFrag() {
         }.attach()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        b = null
-    }
+
 }
