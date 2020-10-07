@@ -26,6 +26,7 @@ object AuthRepo {
         FirebaseAuthInvalidCredentialsException::class,
         FirebaseAuthUserCollisionException::class
     )
+
     suspend fun signUp(email: String, password: String): AuthResult =
         auth.createUserWithEmailAndPassword(email, password).await()
 
