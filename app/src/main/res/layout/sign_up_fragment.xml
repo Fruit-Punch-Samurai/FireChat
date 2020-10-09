@@ -65,11 +65,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/signUpTxt"
+            android:id="@+id/signUpNameTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@={viewModel.usernameSentence}"
+            android:text="@string/yourUsernameWillBe"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

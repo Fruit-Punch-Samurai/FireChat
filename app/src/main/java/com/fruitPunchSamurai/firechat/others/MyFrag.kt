@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -43,18 +45,18 @@ abstract class MyFrag : Fragment() {
     }
 
     /**Shows a Snackbar with the message "[getString(resID)]" */
-    fun showSnackBar(resID: Int) {
+    fun showSnackBar(@StringRes resID: Int) {
         val msg = getString(resID)
         showSnackBar(msg)
     }
 
     /**Shows a Snackbar with the message "[getString(resID)] + [msg]" */
-    fun showSnackBar(resID: Int, msg: String) {
+    fun showSnackBar(@StringRes resID: Int, msg: String) {
         val finalMessage = getString(resID) + msg
         showSnackBar(finalMessage)
     }
 
-    fun navigateTo(actionID: Int) {
+    fun navigateTo(@IdRes actionID: Int) {
         findNavController().navigate(actionID)
     }
 

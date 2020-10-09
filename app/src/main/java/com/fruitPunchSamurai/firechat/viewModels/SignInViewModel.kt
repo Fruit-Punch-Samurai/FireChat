@@ -1,48 +1,54 @@
 package com.fruitPunchSamurai.firechat.viewModels
 
 import android.app.Application
+import androidx.lifecycle.MutableLiveData
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.others.MyAndroidViewModel
 import com.fruitPunchSamurai.firechat.others.MyException
+import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.others.PreferencesManager
 import com.fruitPunchSamurai.firechat.repos.AuthRepo
-import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
 
 class SignInViewModel(application: Application) : MyAndroidViewModel(application) {
 
+    var state: MutableLiveData<MyState> = MutableLiveData(MyState.Idle)
     var email: String = getLastUserEmailPreference()
     var password: String = ""
+    private val auth = AuthRepo()
 
     /** Sign in and return the username if the operation succeeds*/
-    @Throws(MyException::class)
     suspend fun signInWithEmailAndPassword(): String? {
-        verifySignInFieldsAreNotEmpty()
-        try {
+        state.value = MyState.Loading
+        if (signInFieldsAreEmpty()) return null
+        return try {
+            val authResult = auth.signIn(email, password)
             addPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key, email)
+            val username = getUsernameFromEmail(authResult.user?.email)
+            state.value = MyState.Finished("${getString(R.string.welcome)} $username")
+            username
 
-            val authResult = AuthRepo.signIn(email, password)
-
-            return getUsernameFromEmail(authResult.user?.email)
-
-        } catch (e: FirebaseAuthInvalidUserException) {
-            throw MyException(getString(R.string.userNotFoundOrDisabled))
-        } catch (e: FirebaseAuthInvalidCredentialsException) {
-            throw MyException(getString(R.string.wrongPassword))
-        } catch (e: FirebaseTooManyRequestsException) {
-            throw MyException(getString(R.string.tooManyFailedLoginAttempts))
         } catch (e: Exception) {
             e.printStackTrace()
-            throw MyException(getString(R.string.undefinedError))
+            val ex = MyException(e.message)
+            state.value = MyState.Error(ex.message)
+            null
         }
     }
 
-    @Throws(MyException::class)
-    private fun verifySignInFieldsAreNotEmpty() {
-        if (email.isBlank()) throw MyException(getString(R.string.provideEmail))
-        if (password.isBlank()) throw MyException(getString(R.string.providePassword))
-        if (!emailIsWellFormatted()) throw MyException(getString(R.string.emailBadlyFormatted))
+    private fun signInFieldsAreEmpty(): Boolean {
+        if (email.isBlank()) {
+            state.value = MyState.Error(getString(R.string.provideEmail))
+            return true
+        }
+        if (password.isBlank()) {
+            state.value = MyState.Error(getString(R.string.providePassword))
+            return true
+        }
+        if (!emailIsWellFormatted()) {
+            state.value = MyState.Error(getString(R.string.emailBadlyFormatted))
+            return true
+        }
+        return false
     }
 
     private fun getUsernameFromEmail(fullEmail: String?) =
@@ -57,6 +63,10 @@ class SignInViewModel(application: Application) : MyAndroidViewModel(application
 
     private fun addPreference(key: String, value: String) {
         PreferencesManager.addPreference(key, value)
+    }
+
+    fun setIdleState() {
+        state.value = MyState.Idle
     }
 
 }

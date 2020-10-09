@@ -6,7 +6,7 @@ import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
-object AuthRepo {
+class AuthRepo {
 
     private val auth = Firebase.auth
 

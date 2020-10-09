@@ -15,13 +15,14 @@ class MessagesFrag : MyFrag() {
         fun newInstance() = MessagesFrag()
     }
 
-    private val vm: MessagesViewModel by viewModels()
+    private val vm by viewModels<MessagesViewModel>()
+    private val auth = AuthRepo()
     private var b: MessagesFragmentBinding? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        b?.button?.setOnClickListener { AuthRepo.logOut() }
+        b?.button?.setOnClickListener { auth.logOut() }
     }
 
     override fun initiateDataBinder(container: ViewGroup?): View? {

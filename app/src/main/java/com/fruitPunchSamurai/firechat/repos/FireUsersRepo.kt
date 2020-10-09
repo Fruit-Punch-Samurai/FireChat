@@ -1,7 +1,6 @@
 package com.fruitPunchSamurai.firechat.repos
 
 import com.fruitPunchSamurai.firechat.models.User
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
@@ -9,6 +8,7 @@ import kotlinx.coroutines.tasks.await
 class FireUsersRepo {
 
     enum class FIELDS(val field: String) {
+        ID("id"),
         NAME("name")
     }
 
@@ -17,9 +17,6 @@ class FireUsersRepo {
 
 
     suspend fun addUser(user: User) {
-        val data = hashMapOf(
-            FIELDS.NAME.field to user.name,
-        )
-        usersColl.document(user.id).set(data, SetOptions.merge()).await()
+        usersColl.document(user.id).set(user).await()
     }
 }

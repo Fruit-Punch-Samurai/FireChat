@@ -21,12 +21,13 @@ class ViewPagerFrag : MyFrag() {
 
     private var b: ViewPagerFragmentBinding? = null
     private val vm: ViewPagerViewModel by viewModels()
+    private val auth = AuthRepo()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initiateViewPager()
         initiateTabLayout()
-        println(AuthRepo.getUsername())
+        println(auth.getUsername())
 
     }
 

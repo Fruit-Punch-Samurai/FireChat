@@ -8,8 +8,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.SignUpFragmentBinding
-import com.fruitPunchSamurai.firechat.others.MyException
 import com.fruitPunchSamurai.firechat.others.MyFrag
+import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.viewModels.SignUpViewModel
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -22,6 +22,7 @@ class SignUpFrag : MyFrag() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         observeEmailChanges()
+        observeState()
     }
 
     override fun initiateDataBinder(container: ViewGroup?): View? {
@@ -50,23 +51,30 @@ class SignUpFrag : MyFrag() {
         vm.email.observe(viewLifecycleOwner, {
             val username = vm.getUsernameFromEmail()
             val sentence = getString(R.string.yourUsernameWillBe)
-            vm.usernameSentence.value = "$sentence $username"
+            val result = "$sentence $username"
+            b?.signUpNameTxt?.text = result
         })
     }
 
-    fun signUp() {
-        hideKeyboard()
-        makeLayoutTouchable(false)
-        MainScope().launch {
-            try {
-                val username = vm.signUp()
-                showSnackBar("${getString(R.string.welcome)} $username")
-                goToViewPagerFrag()
-            } catch (e: MyException) {
-                showSnackBar(e.message)
+    private fun observeState() {
+        vm.state.observe(viewLifecycleOwner, {
+            when (it) {
+                is MyState.Finished -> {
+                    showSnackBar(it.msg)
+                    makeLayoutTouchable(true)
+                    vm.setIdleState()
+                }
+                is MyState.Loading -> {
+                    hideKeyboard()
+                    makeLayoutTouchable(false)
+                }
+                is MyState.Error -> {
+                    showSnackBar(it.msg)
+                    makeLayoutTouchable(true)
+                    vm.setIdleState()
+                }
             }
-            makeLayoutTouchable(true)
-        }
+        })
     }
 
     private fun goToViewPagerFrag() {
@@ -76,6 +84,17 @@ class SignUpFrag : MyFrag() {
 
     fun cancel() {
         findNavController().popBackStack()
+    }
+
+    fun signUp() {
+        MainScope().launch {
+            val username = vm.signUp()
+            if (!username.isNullOrBlank()) {
+                showSnackBar("${getString(R.string.welcome)} $username")
+                goToViewPagerFrag()
+            }
+
+        }
     }
 
 }

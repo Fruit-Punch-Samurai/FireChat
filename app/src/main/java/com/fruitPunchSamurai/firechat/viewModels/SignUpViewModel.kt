@@ -6,17 +6,19 @@ import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.models.User
 import com.fruitPunchSamurai.firechat.others.MyAndroidViewModel
 import com.fruitPunchSamurai.firechat.others.MyException
+import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.repos.AuthRepo
-import com.fruitPunchSamurai.firechat.repos.FireRepo
-import com.google.firebase.FirebaseNetworkException
-import com.google.firebase.auth.*
+import com.fruitPunchSamurai.firechat.repos.MainRepo
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import java.util.*
 
 class SignUpViewModel(application: Application) : MyAndroidViewModel(application) {
 
-    private val fire = FireRepo()
-    var email: MutableLiveData<String> = MutableLiveData()
-    var usernameSentence: MutableLiveData<String> = MutableLiveData()
+    private val fire = MainRepo()
+    private val auth = AuthRepo()
+    var state: MutableLiveData<MyState> = MutableLiveData(MyState.Idle)
+    var email = MutableLiveData<String>()
     var password = ""
     var confirmedPassword = ""
 
@@ -26,9 +28,15 @@ class SignUpViewModel(application: Application) : MyAndroidViewModel(application
 
     private fun emailIsWellFormatted() = email.value.toString().contains(Regex("@. *"))
 
+    fun setIdleState() {
+        state.value = MyState.Idle
+    }
 
-    private fun verifyPasswordsAreIdentical() {
-        if (password != confirmedPassword) throw MyException(getString(R.string.pleaseConfirmPassword))
+    private fun passwordsAreIdentical(): Boolean {
+        return if (password != confirmedPassword) {
+            state.value = MyState.Error(getString(R.string.pleaseConfirmPassword))
+            false
+        } else true
     }
 
     @Throws(FirebaseAuthInvalidUserException::class)
@@ -38,7 +46,7 @@ class SignUpViewModel(application: Application) : MyAndroidViewModel(application
     }
 
     private suspend fun saveUsernameToAuth() {
-        AuthRepo.setUsername(getUsernameFromEmail())
+        auth.setUsername(getUsernameFromEmail())
     }
 
     private suspend fun saveUsernameToFirestore(authResult: AuthResult) {
@@ -47,38 +55,45 @@ class SignUpViewModel(application: Application) : MyAndroidViewModel(application
     }
 
 
-    @Throws(MyException::class)
-    private fun verifySignInFieldsAreNotEmpty() {
-        if (email.value.isNullOrBlank()) throw MyException(getString(R.string.provideEmail))
-        if (password.isBlank()) throw MyException(getString(R.string.providePassword))
-        if (confirmedPassword.isBlank()) throw MyException(getString(R.string.pleaseConfirmPassword))
-        if (!emailIsWellFormatted()) throw MyException(getString(R.string.emailBadlyFormatted))
+    private fun signInFieldsAreEmpty(): Boolean {
+        if (email.value.isNullOrBlank()) {
+            state.value = MyState.Error(getString(R.string.provideEmail))
+            return true
+        }
+        if (password.isBlank()) {
+            state.value = MyState.Error(getString(R.string.providePassword))
+            return true
+        }
+        if (confirmedPassword.isBlank()) {
+            state.value = MyState.Error(getString(R.string.pleaseConfirmPassword))
+            return true
+        }
+        if (!emailIsWellFormatted()) {
+            state.value = MyState.Error(getString(R.string.emailBadlyFormatted))
+            return true
+        }
+        return false
     }
 
     /** Sign up and return the username if the operation succeeds*/
     @Throws(MyException::class)
-    suspend fun signUp(): String {
-        verifySignInFieldsAreNotEmpty()
-        verifyPasswordsAreIdentical()
-        try {
+    suspend fun signUp(): String? {
+        state.value = MyState.Loading
 
-            val authResult = AuthRepo.signUp(email.value.toString(), password)
+        if (signInFieldsAreEmpty()) return null
+        if (!passwordsAreIdentical()) return null
+
+        return try {
+            val authResult = auth.signUp(email.value.toString(), password)
             saveUsername(authResult)
-            return getUsernameFromEmail()
-
-        } catch (e: FirebaseAuthWeakPasswordException) {
-            throw MyException(getString(R.string.chooseStrongerPassword))
-        } catch (e: FirebaseAuthInvalidUserException) {
-            throw MyException(getString(R.string.userNotFoundOrDisabled))
-        } catch (e: FirebaseAuthInvalidCredentialsException) {
-            throw MyException(getString(R.string.invalidCredentials))
-        } catch (e: FirebaseAuthUserCollisionException) {
-            throw MyException(getString(R.string.emailAddressTaken))
-        } catch (e: FirebaseNetworkException) {
-            throw MyException(getString(R.string.noNetworkConnection))
+            val username = getUsernameFromEmail()
+            state.value = MyState.Finished("${getString(R.string.welcome)} $username")
+            username
         } catch (e: Exception) {
             e.printStackTrace()
-            throw MyException(getString(R.string.undefinedError))
+            val ex = MyException(e.message)
+            state.value = MyState.Error(ex.message)
+            null
         }
     }
 }

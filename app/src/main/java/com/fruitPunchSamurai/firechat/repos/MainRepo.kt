@@ -2,12 +2,11 @@ package com.fruitPunchSamurai.firechat.repos
 
 import com.fruitPunchSamurai.firechat.models.User
 
-class FireRepo {
+class MainRepo {
 
-    private var usersRepo = FireUsersRepo()
+    private val fireRepo = FireRepo()
 
     suspend fun addUser(user: User) {
-        usersRepo.addUser(user)
+        fireRepo.addUser(user)
     }
-
 }

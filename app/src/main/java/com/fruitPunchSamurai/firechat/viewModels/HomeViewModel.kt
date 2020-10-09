@@ -6,6 +6,8 @@ import com.fruitPunchSamurai.firechat.repos.AuthRepo
 
 class HomeViewModel(application: Application) : MyAndroidViewModel(application) {
 
-    fun userIsLoggedIn() = AuthRepo.isLoggedIn()
+    private val auth = AuthRepo()
+
+    fun userIsLoggedIn() = auth.isLoggedIn()
 
 }
