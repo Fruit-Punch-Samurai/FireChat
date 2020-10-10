@@ -79,7 +79,6 @@ class SignUpFrag : MyFrag() {
 
     private fun goToViewPagerFrag() {
         navigateTo(R.id.action_signUpFrag_to_viewPagerFrag)
-
     }
 
     fun cancel() {
@@ -90,7 +89,6 @@ class SignUpFrag : MyFrag() {
         MainScope().launch {
             val username = vm.signUp()
             if (!username.isNullOrBlank()) {
-                showSnackBar("${getString(R.string.welcome)} $username")
                 goToViewPagerFrag()
             }
 

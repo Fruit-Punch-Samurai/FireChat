@@ -1,6 +1,6 @@
 package com.fruitPunchSamurai.firechat.repos
 
-import com.google.firebase.auth.*
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
@@ -10,27 +10,23 @@ class AuthRepo {
 
     private val auth = Firebase.auth
 
+    fun getUID() = auth.currentUser?.uid
+
     fun isLoggedIn() = auth.currentUser != null
 
     fun logOut() = auth.signOut()
 
-    fun getUsername() = if (isLoggedIn()) auth.currentUser!!.displayName else null
+    /**Gets the username stored in Firebase Auth*/
+    fun getUsername() = if (isLoggedIn()) auth.currentUser?.displayName else null
 
-    @Throws(FirebaseAuthInvalidUserException::class, FirebaseAuthInvalidCredentialsException::class)
+    fun getEmail() = if (isLoggedIn()) auth.currentUser?.email else null
+
     suspend fun signIn(email: String, password: String): AuthResult =
         auth.signInWithEmailAndPassword(email, password).await()
-
-
-    @Throws(
-        FirebaseAuthWeakPasswordException::class,
-        FirebaseAuthInvalidCredentialsException::class,
-        FirebaseAuthUserCollisionException::class
-    )
 
     suspend fun signUp(email: String, password: String): AuthResult =
         auth.createUserWithEmailAndPassword(email, password).await()
 
-    @Throws(FirebaseAuthInvalidUserException::class)
     suspend fun setUsername(name: String) {
         val user = auth.currentUser
 

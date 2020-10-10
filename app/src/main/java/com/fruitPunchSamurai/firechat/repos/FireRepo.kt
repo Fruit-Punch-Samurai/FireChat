@@ -1,6 +1,7 @@
 package com.fruitPunchSamurai.firechat.repos
 
 import com.fruitPunchSamurai.firechat.models.User
+import com.google.firebase.firestore.DocumentSnapshot
 
 class FireRepo {
 
@@ -9,5 +10,8 @@ class FireRepo {
     suspend fun addUser(user: User) {
         usersRepo.addUser(user)
     }
+
+    suspend fun getUser(id: String?): DocumentSnapshot = usersRepo.getUser(id)
+
 
 }

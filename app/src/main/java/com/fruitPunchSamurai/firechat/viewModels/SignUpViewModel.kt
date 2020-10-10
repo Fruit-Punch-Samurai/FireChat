@@ -10,7 +10,6 @@ import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.repos.AuthRepo
 import com.fruitPunchSamurai.firechat.repos.MainRepo
 import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import java.util.*
 
 class SignUpViewModel(application: Application) : MyAndroidViewModel(application) {
@@ -39,7 +38,6 @@ class SignUpViewModel(application: Application) : MyAndroidViewModel(application
         } else true
     }
 
-    @Throws(FirebaseAuthInvalidUserException::class)
     private suspend fun saveUsername(authResult: AuthResult) {
         saveUsernameToAuth()
         saveUsernameToFirestore(authResult)
@@ -80,19 +78,18 @@ class SignUpViewModel(application: Application) : MyAndroidViewModel(application
     suspend fun signUp(): String? {
         state.value = MyState.Loading
 
-        if (signInFieldsAreEmpty()) return null
-        if (!passwordsAreIdentical()) return null
+        if (signInFieldsAreEmpty() || !passwordsAreIdentical()) return null
 
         return try {
-            val authResult = auth.signUp(email.value.toString(), password)
+            val authResult = auth.signUp(email.value!!, password)
             saveUsername(authResult)
+
             val username = getUsernameFromEmail()
             state.value = MyState.Finished("${getString(R.string.welcome)} $username")
             username
         } catch (e: Exception) {
             e.printStackTrace()
-            val ex = MyException(e.message)
-            state.value = MyState.Error(ex.message)
+            state.value = MyState.Error(e.message!!)
             null
         }
     }
