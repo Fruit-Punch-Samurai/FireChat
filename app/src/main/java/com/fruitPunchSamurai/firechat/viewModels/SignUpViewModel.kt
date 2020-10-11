@@ -25,7 +25,7 @@ class SignUpViewModel(application: Application) : MyAndroidViewModel(application
         if (emailIsWellFormatted()) email.value.toString().substringBefore("@")
             .capitalize(Locale.getDefault()) else ""
 
-    private fun emailIsWellFormatted() = email.value.toString().contains(Regex("@. *"))
+    private fun emailIsWellFormatted() = email.value!!.matches(Regex(".+@.*[.].*"))
 
     fun setIdleState() {
         state.value = MyState.Idle
