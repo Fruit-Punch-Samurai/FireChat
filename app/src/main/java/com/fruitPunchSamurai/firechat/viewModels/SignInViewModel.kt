@@ -21,7 +21,7 @@ class SignInViewModel(application: Application) : MyAndroidViewModel(application
     private fun getUsernameFromEmail(fullEmail: String?) =
         fullEmail?.substringBefore("@") ?: getString(R.string.unknownUser)
 
-    private fun emailIsWellFormatted() = email.matches(Regex(".+@.*[.].*"))
+    private fun emailIsWellFormatted() = email.matches(Regex(".+@\\w+[.]\\w+.*"))
 
     private fun getLastUserEmailPreference() =
         PreferencesManager.getPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key) ?: ""
