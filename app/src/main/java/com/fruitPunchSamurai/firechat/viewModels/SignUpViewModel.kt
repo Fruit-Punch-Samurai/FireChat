@@ -1,10 +1,12 @@
 package com.fruitPunchSamurai.firechat.viewModels
 
 import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.models.User
-import com.fruitPunchSamurai.firechat.others.MyAndroidViewModel
+import com.fruitPunchSamurai.firechat.others.EmailMatcher.emailIsWellFormatted
+import com.fruitPunchSamurai.firechat.others.MyAndroidViewModel.getString
 import com.fruitPunchSamurai.firechat.others.MyException
 import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.repos.AuthRepo
@@ -12,7 +14,7 @@ import com.fruitPunchSamurai.firechat.repos.MainRepo
 import com.google.firebase.auth.AuthResult
 import java.util.*
 
-class SignUpViewModel(application: Application) : MyAndroidViewModel(application) {
+class SignUpViewModel(application: Application) : AndroidViewModel(application) {
 
     private val fire = MainRepo()
     private val auth = AuthRepo()
@@ -22,10 +24,9 @@ class SignUpViewModel(application: Application) : MyAndroidViewModel(application
     var confirmedPassword = ""
 
     fun getUsernameFromEmail() =
-        if (emailIsWellFormatted()) email.value.toString().substringBefore("@")
+        if (emailIsWellFormatted(email.value.toString())) email.value.toString()
+            .substringBefore("@")
             .capitalize(Locale.getDefault()) else ""
-
-    private fun emailIsWellFormatted() = email.value!!.matches(Regex(".+@\\w+[.]\\w+.*"))
 
     fun setIdleState() {
         state.value = MyState.Idle
@@ -66,7 +67,7 @@ class SignUpViewModel(application: Application) : MyAndroidViewModel(application
             state.value = MyState.Error(getString(R.string.pleaseConfirmPassword))
             return true
         }
-        if (!emailIsWellFormatted()) {
+        if (!emailIsWellFormatted(email.value.toString())) {
             state.value = MyState.Error(getString(R.string.emailBadlyFormatted))
             return true
         }

@@ -1,16 +1,18 @@
 package com.fruitPunchSamurai.firechat.viewModels
 
 import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.models.User
-import com.fruitPunchSamurai.firechat.others.MyAndroidViewModel
+import com.fruitPunchSamurai.firechat.others.EmailMatcher.emailIsWellFormatted
+import com.fruitPunchSamurai.firechat.others.MyAndroidViewModel.getString
 import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.others.PreferencesManager
 import com.fruitPunchSamurai.firechat.repos.AuthRepo
 import com.fruitPunchSamurai.firechat.repos.MainRepo
 
-class SignInViewModel(application: Application) : MyAndroidViewModel(application) {
+class SignInViewModel(application: Application) : AndroidViewModel(application) {
 
     var state: MutableLiveData<MyState> = MutableLiveData(MyState.Idle)
     var email: String = getLastUserEmailPreference()
@@ -20,8 +22,6 @@ class SignInViewModel(application: Application) : MyAndroidViewModel(application
 
     private fun getUsernameFromEmail(fullEmail: String?) =
         fullEmail?.substringBefore("@") ?: getString(R.string.unknownUser)
-
-    private fun emailIsWellFormatted() = email.matches(Regex(".+@\\w+[.]\\w+.*"))
 
     private fun getLastUserEmailPreference() =
         PreferencesManager.getPreference(PreferencesManager.KEYS.LAST_USER_EMAIL.key) ?: ""
@@ -45,7 +45,7 @@ class SignInViewModel(application: Application) : MyAndroidViewModel(application
             state.value = MyState.Error(getString(R.string.providePassword))
             return true
         }
-        if (!emailIsWellFormatted()) {
+        if (!emailIsWellFormatted(email)) {
             state.value = MyState.Error(getString(R.string.emailBadlyFormatted))
             return true
         }

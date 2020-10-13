@@ -17,9 +17,9 @@ class AuthRepo {
     fun logOut() = auth.signOut()
 
     /**Gets the username stored in Firebase Auth*/
-    fun getUsername() = if (isLoggedIn()) auth.currentUser?.displayName else null
+    fun getUsername() = auth.currentUser?.displayName
 
-    fun getEmail() = if (isLoggedIn()) auth.currentUser?.email else null
+    fun getEmail() = auth.currentUser?.email
 
     suspend fun signIn(email: String, password: String): AuthResult =
         auth.signInWithEmailAndPassword(email, password).await()
@@ -33,6 +33,6 @@ class AuthRepo {
         val profileUpdates = userProfileChangeRequest {
             displayName = name
         }
-        user!!.updateProfile(profileUpdates).await()
+        user?.updateProfile(profileUpdates)?.await()
     }
 }
