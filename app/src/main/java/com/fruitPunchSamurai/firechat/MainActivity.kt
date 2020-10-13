@@ -10,6 +10,7 @@ private lateinit var b: ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     //TODO: Motion layout and Instant Modules
+    //TODO: Robolectric
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

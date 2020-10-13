@@ -1,20 +1,30 @@
 package com.fruitPunchSamurai.firechat.fragments
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.HomeFragmentBinding
-import com.fruitPunchSamurai.firechat.others.MyFrag
+import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.viewModels.HomeViewModel
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class HomeFrag : MyFrag() {
+class HomeFrag : Fragment() {
 
     private var b: HomeFragmentBinding? = null
     private val vm: HomeViewModel by viewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return initiateDataBinder(container)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -31,7 +41,7 @@ class HomeFrag : MyFrag() {
         }
     }
 
-    override fun initiateDataBinder(container: ViewGroup?): View? {
+    private fun initiateDataBinder(container: ViewGroup?): View? {
         b = HomeFragmentBinding.inflate(layoutInflater, container, false)
         return b?.root
     }

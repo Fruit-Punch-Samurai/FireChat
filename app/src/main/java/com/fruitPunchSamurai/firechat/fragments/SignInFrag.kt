@@ -1,29 +1,44 @@
 package com.fruitPunchSamurai.firechat.fragments
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.SignInFragmentBinding
-import com.fruitPunchSamurai.firechat.others.MyFrag
+import com.fruitPunchSamurai.firechat.others.MyFrag.hideKeyboard
+import com.fruitPunchSamurai.firechat.others.MyFrag.makeLayoutTouchable
+import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
+import com.fruitPunchSamurai.firechat.others.MyFrag.showSnackBar
 import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.viewModels.SignInViewModel
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class SignInFrag : MyFrag() {
+class SignInFrag : Fragment() {
 
     private var b: SignInFragmentBinding? = null
     private val vm: SignInViewModel by viewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = initiateDataBinder(container)
+        bindData()
+        return view
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         observeState()
     }
 
-    override fun initiateDataBinder(container: ViewGroup?): View? {
+    private fun initiateDataBinder(container: ViewGroup?): View? {
         b = DataBindingUtil.inflate(
             layoutInflater,
             R.layout.sign_in_fragment,
@@ -35,7 +50,7 @@ class SignInFrag : MyFrag() {
         return b?.root
     }
 
-    override fun bindData() {
+    private fun bindData() {
         b?.viewModel = vm
         b?.frag = this
     }

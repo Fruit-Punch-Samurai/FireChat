@@ -17,7 +17,7 @@ class SignUpViewModel(application: Application) : MyAndroidViewModel(application
     private val fire = MainRepo()
     private val auth = AuthRepo()
     var state: MutableLiveData<MyState> = MutableLiveData(MyState.Idle)
-    var email = MutableLiveData<String>()
+    var email = MutableLiveData("null")
     var password = ""
     var confirmedPassword = ""
 
