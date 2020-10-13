@@ -10,17 +10,18 @@ object PreferencesManager {
         LAST_USER_EMAIL("lastUserEmail")
     }
 
-    private lateinit var context: Context
+    private lateinit var appContext: Context
 
     /**Gets the context of the app, Must be called at app start*/
     fun initialize(context: Context) {
-        this.context = context
+        this.appContext = context
         getPreference("lastUserEmail")
     }
 
     private fun getAllPreferences(): SharedPreferences {
-        return context.getSharedPreferences(
-            context.getString(R.string.preference_file_name), Context.MODE_PRIVATE
+        return appContext.getSharedPreferences(
+            appContext.getString(R.string.preference_file_name),
+            Context.MODE_PRIVATE
         )
     }
 

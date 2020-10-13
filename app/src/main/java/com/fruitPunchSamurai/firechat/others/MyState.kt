@@ -4,7 +4,7 @@ sealed class MyState {
 
     object Idle : MyState()
 
-    object Loading : MyState()
+    class Loading(val msg: String = "Loading") : MyState()
 
     class Finished(val msg: String = "") : MyState()
 
