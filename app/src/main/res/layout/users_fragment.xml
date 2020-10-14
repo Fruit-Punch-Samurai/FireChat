@@ -11,7 +11,7 @@
 
         <variable
             name="adapter"
-            type="com.fruitPunchSamurai.firechat.adapters.UsersAdapter" />
+            type="com.fruitPunchSamurai.firechat.adapters.UsersRecyclerAdapter" />
 
     </data>
 

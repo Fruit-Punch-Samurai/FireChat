@@ -16,6 +16,8 @@ class FireUsersRepo {
     private val fire = Firebase.firestore
     private val usersColl = fire.collection("Users")
 
+    suspend fun getAllUsers() = usersColl.get().await()
+
     suspend fun addUser(user: User) {
         usersColl.document(user.id).set(user).await()
     }

@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.fruitPunchSamurai.firechat.databinding.UsersRecyclerBinding
 import com.fruitPunchSamurai.firechat.models.User
 
-class UsersAdapter(var userList: ArrayList<User>) :
-    RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
+class UsersRecyclerAdapter(options: FirestoreRecyclerOptions<User>) :
+    FirestoreRecyclerAdapter<User, UsersRecyclerAdapter.ViewHolder>(options) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -17,11 +19,10 @@ class UsersAdapter(var userList: ArrayList<User>) :
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindData(userList[position])
-    }
 
-    override fun getItemCount() = userList.size
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, model: User) {
+        holder.bindData(model)
+    }
 
 
     class ViewHolder(val b: UsersRecyclerBinding) : RecyclerView.ViewHolder(b.root),
@@ -35,6 +36,6 @@ class UsersAdapter(var userList: ArrayList<User>) :
             b.user = user
             b.executePendingBindings()
         }
-
     }
+
 }

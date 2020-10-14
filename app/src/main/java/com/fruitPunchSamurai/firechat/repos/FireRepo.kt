@@ -7,6 +7,8 @@ class FireRepo {
 
     private var usersRepo = FireUsersRepo()
 
+    suspend fun getAllUsers() = usersRepo.getAllUsers()
+
     suspend fun addUser(user: User) {
         usersRepo.addUser(user)
     }

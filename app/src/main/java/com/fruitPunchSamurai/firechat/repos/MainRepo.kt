@@ -7,6 +7,8 @@ class MainRepo {
 
     private val fireRepo = FireRepo()
 
+    suspend fun getAllUsersQuery() = fireRepo.getAllUsers()
+
     suspend fun addUser(user: User) {
         fireRepo.addUser(user)
     }
