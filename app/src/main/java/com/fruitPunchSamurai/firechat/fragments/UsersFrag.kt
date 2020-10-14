@@ -4,9 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.fruitPunchSamurai.firechat.R
+import com.fruitPunchSamurai.firechat.adapters.UsersAdapter
 import com.fruitPunchSamurai.firechat.databinding.UsersFragmentBinding
+import com.fruitPunchSamurai.firechat.models.User
 import com.fruitPunchSamurai.firechat.viewModels.UsersViewModel
 
 class UsersFrag : Fragment() {
@@ -24,11 +29,28 @@ class UsersFrag : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = initiateDataBinder(container)
+        bindData()
         return view
     }
 
     private fun initiateDataBinder(container: ViewGroup?): View? {
-        b = UsersFragmentBinding.inflate(layoutInflater, container, false)
+        b = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.users_fragment,
+            container,
+            false
+        ) as UsersFragmentBinding
         return b?.root
+    }
+
+    private fun bindData() {
+        b?.lifecycleOwner = viewLifecycleOwner
+        b?.vm = vm
+        b?.usersRecycler?.layoutManager = LinearLayoutManager(requireActivity())
+        val array = ArrayList<User>()
+        repeat(10) {
+            array.add(User("BATATA", "Name$it"))
+        }
+        b?.adapter = UsersAdapter(array)
     }
 }

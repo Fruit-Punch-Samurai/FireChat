@@ -32,21 +32,21 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun setIdleState() {
-        state.value = MyState.Idle
+        state.postValue(MyState.Idle)
     }
 
 
     private fun signInFieldsAreEmpty(): Boolean {
         if (email.isBlank()) {
-            state.value = MyState.Error(getString(R.string.provideEmail))
+            state.postValue(MyState.Error(getString(R.string.provideEmail)))
             return true
         }
         if (password.isBlank()) {
-            state.value = MyState.Error(getString(R.string.providePassword))
+            state.postValue(MyState.Error(getString(R.string.providePassword)))
             return true
         }
         if (!emailIsWellFormatted(email)) {
-            state.value = MyState.Error(getString(R.string.emailBadlyFormatted))
+            state.postValue(MyState.Error(getString(R.string.emailBadlyFormatted)))
             return true
         }
         return false
@@ -65,7 +65,7 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
 
     /** Sign in and return the username if the operation succeeds*/
     suspend fun signInWithEmailAndPassword(): String? {
-        state.value = MyState.Loading
+        state.postValue(MyState.Loading())
         if (signInFieldsAreEmpty()) return null
 
         return try {
@@ -75,12 +75,12 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
             saveUsername()
 
             val username = getUsernameFromEmail(email)
-            state.value = MyState.Finished("${getString(R.string.welcome)} $username")
+            state.postValue(MyState.Finished("${getString(R.string.welcome)} $username"))
             username
 
         } catch (e: Exception) {
             e.printStackTrace()
-            state.value = MyState.Error(e.message!!)
+            state.postValue(MyState.Error(e.message))
             null
         }
     }

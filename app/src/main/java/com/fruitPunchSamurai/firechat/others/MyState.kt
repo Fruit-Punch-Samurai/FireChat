@@ -8,6 +8,6 @@ sealed class MyState {
 
     class Finished(val msg: String = "") : MyState()
 
-    class Error(val msg: String = "Undefined error") : MyState()
+    class Error(val msg: String? = "Undefined error") : MyState()
 
 }

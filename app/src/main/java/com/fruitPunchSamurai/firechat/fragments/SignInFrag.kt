@@ -45,12 +45,11 @@ class SignInFrag : Fragment() {
             container,
             false
         ) as SignInFragmentBinding
-        b?.lifecycleOwner = viewLifecycleOwner
-        b?.viewModel = vm
         return b?.root
     }
 
     private fun bindData() {
+        b?.lifecycleOwner = viewLifecycleOwner
         b?.viewModel = vm
         b?.frag = this
     }

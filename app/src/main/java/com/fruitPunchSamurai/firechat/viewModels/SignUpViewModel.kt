@@ -29,12 +29,12 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
             .capitalize(Locale.getDefault()) else ""
 
     fun setIdleState() {
-        state.value = MyState.Idle
+        state.postValue(MyState.Idle)
     }
 
     private fun passwordsAreIdentical(): Boolean {
         return if (password != confirmedPassword) {
-            state.value = MyState.Error(getString(R.string.pleaseConfirmPassword))
+            state.postValue(MyState.Error(getString(R.string.pleaseConfirmPassword)))
             false
         } else true
     }
@@ -56,19 +56,19 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun signInFieldsAreEmpty(): Boolean {
         if (email.value.isNullOrBlank()) {
-            state.value = MyState.Error(getString(R.string.provideEmail))
+            state.postValue(MyState.Error(getString(R.string.provideEmail)))
             return true
         }
         if (password.isBlank()) {
-            state.value = MyState.Error(getString(R.string.providePassword))
+            state.postValue(MyState.Error(getString(R.string.providePassword)))
             return true
         }
         if (confirmedPassword.isBlank()) {
-            state.value = MyState.Error(getString(R.string.pleaseConfirmPassword))
+            state.postValue(MyState.Error(getString(R.string.pleaseConfirmPassword)))
             return true
         }
         if (!emailIsWellFormatted(email.value.toString())) {
-            state.value = MyState.Error(getString(R.string.emailBadlyFormatted))
+            state.postValue(MyState.Error(getString(R.string.emailBadlyFormatted)))
             return true
         }
         return false
@@ -77,7 +77,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     /** Sign up and return the username if the operation succeeds*/
     @Throws(MyException::class)
     suspend fun signUp(): String? {
-        state.value = MyState.Loading
+        state.postValue(MyState.Loading())
 
         if (signInFieldsAreEmpty() || !passwordsAreIdentical()) return null
 
@@ -86,11 +86,11 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
             saveUsername(authResult)
 
             val username = getUsernameFromEmail()
-            state.value = MyState.Finished("${getString(R.string.welcome)} $username")
+            state.postValue(MyState.Finished("${getString(R.string.welcome)} $username"))
             username
         } catch (e: Exception) {
             e.printStackTrace()
-            state.value = MyState.Error(e.message!!)
+            state.postValue(MyState.Error(e.message))
             null
         }
     }

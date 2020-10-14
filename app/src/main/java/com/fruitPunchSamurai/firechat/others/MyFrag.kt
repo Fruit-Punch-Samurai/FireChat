@@ -15,8 +15,8 @@ object MyFrag {
         requireActivity().application
     }
 
-    fun Fragment.showSnackBar(msg: String) {
-        Snackbar.make(requireView(), msg, 2000).show()
+    fun Fragment.showSnackBar(msg: String?) {
+        Snackbar.make(requireView(), msg.toString(), 2000).show()
     }
 
     /**Shows a Snackbar with the message "[getString(resID)]" */
@@ -48,4 +48,5 @@ object MyFrag {
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
         )
     }
+
 }
