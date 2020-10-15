@@ -8,21 +8,20 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.fruitPunchSamurai.firechat.R
-import com.fruitPunchSamurai.firechat.databinding.UsersFragmentBinding
-import com.fruitPunchSamurai.firechat.viewModels.UsersViewModel
+import com.fruitPunchSamurai.firechat.databinding.ChatFragmentBinding
+import com.fruitPunchSamurai.firechat.viewModels.ChatViewModel
 
-class UsersFrag : Fragment() {
+class ChatFrag : Fragment() {
 
     companion object {
-        fun newInstance() = UsersFrag()
+        fun newInstance() = ChatFrag()
     }
 
-    private val vm: UsersViewModel by viewModels()
-    private var b: UsersFragmentBinding? = null
+    private val vm: ChatViewModel by viewModels()
+    private var b: ChatFragmentBinding? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = initiateDataBinder(container)
@@ -33,19 +32,15 @@ class UsersFrag : Fragment() {
     private fun initiateDataBinder(container: ViewGroup?): View? {
         b = DataBindingUtil.inflate(
             layoutInflater,
-            R.layout.users_fragment,
+            R.layout.chat_fragment,
             container,
             false
-        ) as UsersFragmentBinding
+        ) as ChatFragmentBinding
         return b?.root
     }
 
     private fun bindData() {
-        vm.initializeTheRecyclerAdapter(viewLifecycleOwner)
-        b?.apply {
-            lifecycleOwner = viewLifecycleOwner
-            viewModel = vm
-        }
+
     }
 
     override fun onDestroyView() {

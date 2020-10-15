@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.fruitPunchSamurai.firechat.databinding.ActivityMainBinding
 import com.fruitPunchSamurai.firechat.others.PreferencesManager
+import net.danlew.android.joda.JodaTimeAndroid
 
 private lateinit var b: ActivityMainBinding
 
@@ -20,5 +21,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         PreferencesManager.initialize(applicationContext)
+        JodaTimeAndroid.init(this)
     }
 }
