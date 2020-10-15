@@ -10,8 +10,11 @@ import com.fruitPunchSamurai.firechat.repos.MainRepo
 class UsersViewModel(application: Application) : AndroidViewModel(application) {
 
     private val mainRepo = MainRepo()
+    lateinit var adapter: UsersRecyclerAdapter
 
-    fun getRecyclerAdapter(lifecycleOwner: LifecycleOwner) =
-        UsersRecyclerAdapter(RecyclerOptions.getAllUsersOption(lifecycleOwner))
-
+    /**Initializes the FirestoreAdapter if it has not been initialized*/
+    fun initializeTheRecyclerAdapter(lifecycleOwner: LifecycleOwner) {
+        if (!this::adapter.isInitialized) adapter =
+            UsersRecyclerAdapter(RecyclerOptions.getAllUsersPagingOption(lifecycleOwner))
+    }
 }

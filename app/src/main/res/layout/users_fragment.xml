@@ -6,12 +6,8 @@
     <data>
 
         <variable
-            name="vm"
+            name="viewModel"
             type="com.fruitPunchSamurai.firechat.viewModels.UsersViewModel" />
-
-        <variable
-            name="adapter"
-            type="com.fruitPunchSamurai.firechat.adapters.UsersRecyclerAdapter" />
 
     </data>
 
@@ -24,7 +20,8 @@
             android:id="@+id/usersRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:setAdapter="@{adapter}" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:setAdapter="@{viewModel.adapter}" />
 
     </FrameLayout>
 </layout>

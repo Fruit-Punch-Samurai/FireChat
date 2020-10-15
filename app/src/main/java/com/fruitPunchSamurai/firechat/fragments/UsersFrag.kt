@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.UsersFragmentBinding
 import com.fruitPunchSamurai.firechat.viewModels.UsersViewModel
@@ -42,10 +41,10 @@ class UsersFrag : Fragment() {
     }
 
     private fun bindData() {
-        b?.lifecycleOwner = viewLifecycleOwner
-        b?.vm = vm
-        b?.usersRecycler?.layoutManager = LinearLayoutManager(requireActivity())
-        b?.adapter = vm.getRecyclerAdapter(viewLifecycleOwner)
-
+        vm.initializeTheRecyclerAdapter(viewLifecycleOwner)
+        b?.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = vm
+        }
     }
 }
