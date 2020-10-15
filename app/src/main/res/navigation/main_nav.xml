@@ -24,7 +24,11 @@
         android:id="@+id/viewPagerFrag"
         android:name="com.fruitPunchSamurai.firechat.fragments.ViewPagerFrag"
         android:label="view_pager_fragment"
-        tools:layout="@layout/view_pager_fragment" />
+        tools:layout="@layout/view_pager_fragment">
+        <action
+            android:id="@+id/action_viewPagerFrag_to_chatFrag"
+            app:destination="@id/chatFrag" />
+    </fragment>
     <fragment
         android:id="@+id/signInFrag"
         android:name="com.fruitPunchSamurai.firechat.fragments.SignInFrag"
@@ -50,4 +54,8 @@
             app:popUpTo="@id/signInFrag"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/chatFrag"
+        android:name="com.fruitPunchSamurai.firechat.fragments.ChatFrag"
+        android:label="ChatFrag" />
 </navigation>

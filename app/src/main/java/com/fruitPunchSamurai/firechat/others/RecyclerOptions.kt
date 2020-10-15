@@ -2,7 +2,9 @@ package com.fruitPunchSamurai.firechat.others
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.paging.PagedList
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
+import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.models.User
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -19,6 +21,22 @@ object RecyclerOptions {
         return FirestorePagingOptions.Builder<User>()
             .setLifecycleOwner(lifecycleOwner)
             .setQuery(rootCollection.collection("Users"), config, User::class.java)
+            .build()
+
+    }
+
+    fun getMessagesOption(
+        lifecycleOwner: LifecycleOwner,
+        userID: String
+    ): FirestoreRecyclerOptions<Message> {
+        return FirestoreRecyclerOptions.Builder<Message>()
+            .setLifecycleOwner(lifecycleOwner)
+            .setQuery(
+                rootCollection.collection("Messages")
+                    .document(userID)
+                    .collection("Messages"),
+                Message::class.java
+            )
             .build()
 
     }

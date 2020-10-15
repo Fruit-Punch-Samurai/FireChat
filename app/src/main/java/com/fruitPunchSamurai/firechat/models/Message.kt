@@ -5,4 +5,5 @@ import org.joda.time.DateTime
 import java.util.*
 
 data class Message(val msg: String, val date: DateTime, @ServerTimestamp val tms: Date) {
+    constructor() : this("", DateTime.now(), Date())
 }

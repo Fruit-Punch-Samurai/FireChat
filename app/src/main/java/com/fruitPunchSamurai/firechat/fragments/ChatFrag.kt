@@ -40,6 +40,11 @@ class ChatFrag : Fragment() {
     }
 
     private fun bindData() {
+        vm.initiateTheRecyclerAdapter(viewLifecycleOwner)
+        b?.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = vm
+        }
 
     }
 

@@ -1,6 +1,5 @@
 package com.fruitPunchSamurai.firechat.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +28,7 @@ class UsersRecyclerAdapter(options: FirestorePagingOptions<User>) :
         View.OnClickListener {
 
         override fun onClick(v: View) {
-            Log.i("OnClickListener", "Clicked")
+
         }
 
         fun bindData(user: User) {
