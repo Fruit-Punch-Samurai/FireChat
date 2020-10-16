@@ -1,13 +1,12 @@
 package com.fruitPunchSamurai.firechat.repos
 
+import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.models.User
 import com.google.firebase.firestore.ktx.toObject
 
 class MainRepo {
 
     private val fireRepo = FireRepo()
-
-    suspend fun getAllUsersQuery() = fireRepo.getAllUsers()
 
     suspend fun addUser(user: User) {
         fireRepo.addUser(user)
@@ -17,5 +16,9 @@ class MainRepo {
         val snap = fireRepo.getUser(id)
         if (!snap.exists()) return null
         return snap.toObject<User>()
+    }
+
+    suspend fun addMessage(message: Message, currentUserID: String, receiverID: String) {
+        fireRepo.addMessage(message, currentUserID, receiverID)
     }
 }

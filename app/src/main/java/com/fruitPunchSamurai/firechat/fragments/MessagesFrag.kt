@@ -39,4 +39,5 @@ class MessagesFrag : Fragment() {
         b = MessagesFragmentBinding.inflate(layoutInflater, container, false)
         return b?.root
     }
+
 }

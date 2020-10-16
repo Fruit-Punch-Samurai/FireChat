@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.UsersFragmentBinding
-import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.viewModels.UsersViewModel
 
 class UsersFrag : Fragment() {
@@ -29,11 +28,6 @@ class UsersFrag : Fragment() {
         val view = initiateDataBinder(container)
         bindData()
         return view
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        navigateTo(R.id.action_viewPagerFrag_to_chatFrag)
     }
 
     private fun initiateDataBinder(container: ViewGroup?): View? {
