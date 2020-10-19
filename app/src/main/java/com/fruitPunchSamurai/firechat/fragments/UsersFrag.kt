@@ -7,8 +7,14 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.firestore.paging.FirestorePagingAdapter
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.UsersFragmentBinding
+import com.fruitPunchSamurai.firechat.databinding.UsersRecyclerBinding
+import com.fruitPunchSamurai.firechat.models.User
+import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
+import com.fruitPunchSamurai.firechat.others.RecyclerOptions
 import com.fruitPunchSamurai.firechat.viewModels.UsersViewModel
 
 class UsersFrag : Fragment() {
@@ -17,8 +23,11 @@ class UsersFrag : Fragment() {
         fun newInstance() = UsersFrag()
     }
 
+    //TODO: State lost
+
     private val vm: UsersViewModel by viewModels()
     private var b: UsersFragmentBinding? = null
+    lateinit var adapter: FirestorePagingAdapter<User, Holder>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,6 +37,12 @@ class UsersFrag : Fragment() {
         val view = initiateDataBinder(container)
         bindData()
         return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        if (savedInstanceState == null) return
+        b?.usersRecycler?.scrollToPosition(savedInstanceState.getInt("position"))
     }
 
     private fun initiateDataBinder(container: ViewGroup?): View? {
@@ -41,10 +56,10 @@ class UsersFrag : Fragment() {
     }
 
     private fun bindData() {
-        vm.initializeTheRecyclerAdapter(viewLifecycleOwner)
+        initiateAdapter()
         b?.apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = vm
+            frag = this@UsersFrag
         }
     }
 
@@ -52,4 +67,38 @@ class UsersFrag : Fragment() {
         super.onDestroyView()
         b = null
     }
+
+    fun goToChatFrag(user: User?) {
+        if (user == null) return
+        val receiverID = user.id
+        val action = ViewPagerFragDirections.actionViewPagerFragToChatFrag(receiverID)
+        navigateTo(action)
+    }
+
+    private fun initiateAdapter() {
+        adapter = object : FirestorePagingAdapter<User, Holder>(
+            RecyclerOptions.getAllUsersPagingOption(viewLifecycleOwner)
+        ) {
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+                val binding = UsersRecyclerBinding.inflate(LayoutInflater.from(parent.context))
+                return Holder(binding) { goToChatFrag(binding.user) }
+            }
+
+            override fun onBindViewHolder(holder: Holder, position: Int, model: User) {
+                holder.bindData(model)
+
+            }
+        }
+    }
+
+    class Holder(private val b: UsersRecyclerBinding, val onClickFun: () -> Unit) :
+        RecyclerView.ViewHolder(b.root) {
+
+        fun bindData(user: User) {
+            b.user = user
+            b.root.setOnClickListener { onClickFun() }
+            b.executePendingBindings()
+        }
+    }
+
 }

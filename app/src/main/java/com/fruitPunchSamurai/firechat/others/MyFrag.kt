@@ -1,11 +1,13 @@
 package com.fruitPunchSamurai.firechat.others
 
 import android.content.Context
+import android.os.Bundle
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 
@@ -31,8 +33,12 @@ object MyFrag {
         showSnackBar(finalMessage)
     }
 
-    fun Fragment.navigateTo(@IdRes actionID: Int) {
-        findNavController().navigate(actionID)
+    fun Fragment.navigateTo(@IdRes actionID: Int, bundle: Bundle? = null) {
+        findNavController().navigate(actionID, bundle)
+    }
+
+    fun Fragment.navigateTo(action: NavDirections) {
+        findNavController().navigate(action)
     }
 
     fun Fragment.hideKeyboard() {

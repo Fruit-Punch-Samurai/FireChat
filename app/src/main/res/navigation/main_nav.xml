@@ -57,5 +57,9 @@
     <fragment
         android:id="@+id/chatFrag"
         android:name="com.fruitPunchSamurai.firechat.fragments.ChatFrag"
-        android:label="ChatFrag" />
+        android:label="ChatFrag">
+        <argument
+            android:name="receiverID"
+            app:argType="string" />
+    </fragment>
 </navigation>

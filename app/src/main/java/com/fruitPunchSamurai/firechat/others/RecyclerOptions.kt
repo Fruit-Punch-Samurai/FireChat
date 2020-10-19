@@ -20,21 +20,22 @@ object RecyclerOptions {
             .build()
         return FirestorePagingOptions.Builder<User>()
             .setLifecycleOwner(lifecycleOwner)
-            .setQuery(rootCollection.collection("Users"), config, User::class.java)
+            .setQuery(rootCollection.collection("Users").orderBy("name"), config, User::class.java)
             .build()
 
     }
 
     fun getMessagesOption(
         lifecycleOwner: LifecycleOwner,
-        userID: String
+        userID: String,
+        receiverID: String
     ): FirestoreRecyclerOptions<Message> {
         return FirestoreRecyclerOptions.Builder<Message>()
             .setLifecycleOwner(lifecycleOwner)
             .setQuery(
                 rootCollection.collection("Messages")
                     .document(userID)
-                    .collection("Messages"),
+                    .collection(receiverID).orderBy("tms"),
                 Message::class.java
             )
             .build()

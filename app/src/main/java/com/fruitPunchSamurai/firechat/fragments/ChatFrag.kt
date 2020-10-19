@@ -7,9 +7,15 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.ChatFragmentBinding
-import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
+import com.fruitPunchSamurai.firechat.databinding.ChatRecyclerBinding
+import com.fruitPunchSamurai.firechat.models.Message
+import com.fruitPunchSamurai.firechat.others.RecyclerOptions
 import com.fruitPunchSamurai.firechat.viewModels.ChatViewModel
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -22,7 +28,11 @@ class ChatFrag : Fragment() {
 
     private val vm: ChatViewModel by viewModels()
     private var b: ChatFragmentBinding? = null
-    private val receiverID = ""
+    private val args: ChatFragArgs by navArgs()
+
+    private lateinit var receiverID: String
+    lateinit var adapter: FirestoreRecyclerAdapter<Message, Holder>
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,17 +54,14 @@ class ChatFrag : Fragment() {
     }
 
     private fun bindData() {
-        vm.initiateTheRecyclerAdapter(viewLifecycleOwner)
+        receiverID = args.receiverID
+        initiateRecyclerView()
+        initiateAdapter()
         b?.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = vm
+            frag = this@ChatFrag
         }
-
-    }
-
-    private fun goToChatFrag() {
-        navigateTo(R.id.action_viewPagerFrag_to_chatFrag)
-        println("Called")
     }
 
     override fun onDestroyView() {
@@ -67,4 +74,37 @@ class ChatFrag : Fragment() {
             vm.sendMessage(receiverID)
         }
     }
+
+    private fun initiateRecyclerView() {
+        val man = LinearLayoutManager(requireActivity()).apply {
+            stackFromEnd = true
+        }
+        b?.recycler?.layoutManager = man
+    }
+
+    private fun initiateAdapter() {
+        adapter = object : FirestoreRecyclerAdapter<Message, Holder>(
+            RecyclerOptions.getMessagesOption(viewLifecycleOwner, vm.getCurrentUserID(), receiverID)
+        ) {
+
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+                val binding = ChatRecyclerBinding.inflate(LayoutInflater.from(parent.context))
+                return Holder(binding)
+            }
+
+            override fun onBindViewHolder(holder: Holder, position: Int, model: Message) {
+                holder.bindData(model)
+            }
+        }
+    }
+
+    class Holder(private val b: ChatRecyclerBinding) : RecyclerView.ViewHolder(b.root) {
+
+        fun bindData(Message: Message) {
+            b.message = Message
+            b.executePendingBindings()
+        }
+    }
+
+
 }

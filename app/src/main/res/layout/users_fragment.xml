@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.fruitPunchSamurai.firechat.viewModels.UsersViewModel" />
+            name="frag"
+            type="com.fruitPunchSamurai.firechat.fragments.UsersFrag" />
 
     </data>
 
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:setAdapter="@{viewModel.adapter}" />
+            app:setAdapter="@{frag.adapter}" />
 
     </FrameLayout>
 </layout>
