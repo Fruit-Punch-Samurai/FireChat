@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.paging.PagedList
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
+import com.fruitPunchSamurai.firechat.models.LastMessage
 import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.models.User
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,25 +21,34 @@ object RecyclerOptions {
             .build()
         return FirestorePagingOptions.Builder<User>()
             .setLifecycleOwner(lifecycleOwner)
-            .setQuery(rootCollection.collection("Users").orderBy("name"), config, User::class.java)
-            .build()
-
+            .setQuery(
+                rootCollection.collection("Users").orderBy("name"),
+                config, User::class.java
+            ).build()
     }
 
     fun getMessagesOption(
         lifecycleOwner: LifecycleOwner,
         userID: String,
         receiverID: String
-    ): FirestoreRecyclerOptions<Message> {
-        return FirestoreRecyclerOptions.Builder<Message>()
+    ): FirestoreRecyclerOptions<Message> =
+        FirestoreRecyclerOptions.Builder<Message>()
             .setLifecycleOwner(lifecycleOwner)
             .setQuery(
-                rootCollection.collection("Messages")
-                    .document(userID)
-                    .collection(receiverID).orderBy("tms"),
-                Message::class.java
-            )
-            .build()
+                rootCollection.collection("Messages").document(userID).collection(receiverID)
+                    .orderBy("tms"), Message::class.java
+            ).build()
 
-    }
+    fun getLastMessagesOption(
+        lifecycleOwner: LifecycleOwner,
+        userID: String,
+    ): FirestoreRecyclerOptions<LastMessage> =
+        FirestoreRecyclerOptions.Builder<LastMessage>()
+            .setLifecycleOwner(lifecycleOwner)
+            .setQuery(
+                rootCollection.collection("LastMessages")
+                    .document(userID).collection("LastMessages")
+                    .orderBy("tms"), LastMessage::class.java
+            ).build()
+
 }

@@ -9,10 +9,10 @@ import kotlinx.coroutines.tasks.await
 
 class FireUsersRepo {
 
-    enum class FIELDS(val field: String) {
-        ID("id"),
-        NAME("name")
-    }
+   private enum class FIELDS(val field: String) {
+       ID("id"),
+       NAME("name")
+   }
 
     private val fire = Firebase.firestore
     private val usersColl = fire.collection("Users")

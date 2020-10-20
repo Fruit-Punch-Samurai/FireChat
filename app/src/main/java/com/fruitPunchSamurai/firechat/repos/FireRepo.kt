@@ -1,5 +1,6 @@
 package com.fruitPunchSamurai.firechat.repos
 
+import com.fruitPunchSamurai.firechat.models.LastMessage
 import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.models.User
 import com.google.firebase.firestore.DocumentSnapshot
@@ -19,6 +20,14 @@ class FireRepo {
 
     suspend fun addMessage(message: Message, currentUserID: String, receiverID: String) {
         messagesRepo.addMessage(message, currentUserID, receiverID)
+    }
+
+    suspend fun addLastMessage(
+        lastMessage: LastMessage,
+        currentUserID: String,
+        receiverID: String
+    ) {
+        messagesRepo.addLastMessage(lastMessage, currentUserID, receiverID)
     }
 
 

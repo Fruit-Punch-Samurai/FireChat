@@ -14,6 +14,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class ViewPagerFrag : Fragment() {
 
+    //TODO: Bottom button to logout
+
     companion object {
         fun newInstance() = ViewPagerFrag()
     }
