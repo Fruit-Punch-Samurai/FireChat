@@ -61,5 +61,8 @@
         <argument
             android:name="receiverID"
             app:argType="string" />
+        <argument
+            android:name="receiverName"
+            app:argType="string" />
     </fragment>
 </navigation>

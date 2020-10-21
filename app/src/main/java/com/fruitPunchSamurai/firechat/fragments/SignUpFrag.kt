@@ -16,7 +16,7 @@ import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.others.MyFrag.showSnackBar
 import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.viewModels.SignUpViewModel
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class SignUpFrag : Fragment() {
@@ -101,7 +101,7 @@ class SignUpFrag : Fragment() {
     }
 
     fun signUp() {
-        MainScope().launch {
+        GlobalScope.launch {
             val username = vm.signUp()
             if (!username.isNullOrBlank()) {
                 goToViewPagerFrag()

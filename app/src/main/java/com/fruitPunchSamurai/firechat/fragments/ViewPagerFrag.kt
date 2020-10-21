@@ -50,7 +50,7 @@ class ViewPagerFrag : Fragment() {
 
     private fun initiateViewPager() {
         val fragments = ArrayList<Fragment>()
-        fragments.add(MessagesFrag.newInstance())
+        fragments.add(LastMessagesFrag.newInstance())
         fragments.add(UsersFrag.newInstance())
 
         b?.viewPager?.adapter = ViewPagerAdapter(fragments, childFragmentManager, lifecycle)

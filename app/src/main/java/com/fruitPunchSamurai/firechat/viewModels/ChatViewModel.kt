@@ -19,7 +19,7 @@ class ChatViewModel : ViewModel() {
 
     fun getCurrentUserID() = auth.getUID()!!
 
-    suspend fun sendMessage(receiverID: String) {
+    suspend fun sendMessage(receiverID: String, receiverName: String) {
         if (newMessage.value.isNullOrBlank()) return
 
         state.postValue(MyState.Loading())
@@ -38,8 +38,7 @@ class ChatViewModel : ViewModel() {
                 msg = newMessage.value!!
                 contactID = receiverID
                 read = false
-                //TODO: Fix name
-                contactName = "Test"
+                contactName = receiverName
             }
 
             repo.addMessage(message, auth.getUID()!!, receiverID)
@@ -51,4 +50,5 @@ class ChatViewModel : ViewModel() {
             state.postValue(MyState.Error(e.localizedMessage))
         }
     }
+
 }

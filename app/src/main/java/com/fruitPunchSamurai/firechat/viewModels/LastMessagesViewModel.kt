@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.fruitPunchSamurai.firechat.repos.AuthRepo
 
-class MessagesViewModel(application: Application) : AndroidViewModel(application) {
+class LastMessagesViewModel(application: Application) : AndroidViewModel(application) {
 
     private val auth = AuthRepo()
 

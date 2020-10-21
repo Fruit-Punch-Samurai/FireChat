@@ -39,12 +39,6 @@ class UsersFrag : Fragment() {
         return view
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        if (savedInstanceState == null) return
-        b?.usersRecycler?.scrollToPosition(savedInstanceState.getInt("position"))
-    }
-
     private fun initiateDataBinder(container: ViewGroup?): View? {
         b = DataBindingUtil.inflate(
             layoutInflater,
@@ -71,7 +65,8 @@ class UsersFrag : Fragment() {
     fun goToChatFrag(user: User?) {
         if (user == null) return
         val receiverID = user.id
-        val action = ViewPagerFragDirections.actionViewPagerFragToChatFrag(receiverID)
+        val receiverName = user.name
+        val action = ViewPagerFragDirections.actionViewPagerFragToChatFrag(receiverID, receiverName)
         navigateTo(action)
     }
 
@@ -86,7 +81,6 @@ class UsersFrag : Fragment() {
 
             override fun onBindViewHolder(holder: Holder, position: Int, model: User) {
                 holder.bindData(model)
-
             }
         }
     }

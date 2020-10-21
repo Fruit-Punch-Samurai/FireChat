@@ -8,8 +8,6 @@ import kotlinx.coroutines.tasks.await
 
 class FireMessagesRepo {
 
-    //TODO:Last message
-
     private enum class FIELDS(val field: String) {
         MESSAGE("msg"),
         OWNER("ownerID"),
@@ -23,15 +21,20 @@ class FireMessagesRepo {
 
     suspend fun addMessage(message: Message, currentUserID: String, receiverID: String) {
         messagesColl.document(currentUserID).collection(receiverID).document().set(message).await()
+        messagesColl.document(receiverID).collection(currentUserID).document().set(message).await()
     }
 
     suspend fun addLastMessage(
         lastMessage: LastMessage,
         currentUserID: String,
-        receiverID: String
+        receiverID: String,
+        currentUsername: String
     ) {
         lastMessagesColl.document(currentUserID).collection("LastMessages")
-            .document(receiverID).set(lastMessage).await()
+            .document(receiverID).set(lastMessage.apply { read = true }).await()
+        lastMessagesColl.document(receiverID).collection("LastMessages")
+            .document(currentUserID)
+            .set(lastMessage.apply { read = false;contactName = currentUsername }).await()
     }
 
 }

@@ -15,7 +15,7 @@ import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.others.MyFrag.showSnackBar
 import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.viewModels.SignInViewModel
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class SignInFrag : Fragment() {
@@ -89,7 +89,7 @@ class SignInFrag : Fragment() {
     }
 
     fun signInWithEmailAndPassword() {
-        MainScope().launch {
+        GlobalScope.launch {
             val username = vm.signInWithEmailAndPassword()
             if (username != null) goToViewPagerFrag()
         }

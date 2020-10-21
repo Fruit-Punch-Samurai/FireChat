@@ -7,13 +7,13 @@
 
         <variable
             name="frag"
-            type="com.fruitPunchSamurai.firechat.fragments.MessagesFrag" />
+            type="com.fruitPunchSamurai.firechat.fragments.LastMessagesFrag" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.MessagesFrag">
+        tools:context=".fragments.LastMessagesFrag">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/messagesRecycler"

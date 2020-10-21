@@ -25,9 +25,10 @@ class FireRepo {
     suspend fun addLastMessage(
         lastMessage: LastMessage,
         currentUserID: String,
-        receiverID: String
+        receiverID: String,
+        currentUsername: String,
     ) {
-        messagesRepo.addLastMessage(lastMessage, currentUserID, receiverID)
+        messagesRepo.addLastMessage(lastMessage, currentUserID, receiverID, currentUsername)
     }
 
 

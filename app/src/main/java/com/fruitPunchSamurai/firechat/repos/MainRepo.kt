@@ -8,6 +8,7 @@ import com.google.firebase.firestore.ktx.toObject
 class MainRepo {
 
     private val fireRepo = FireRepo()
+    private val authRepo = AuthRepo()
 
     suspend fun addUser(user: User) {
         fireRepo.addUser(user)
@@ -26,8 +27,8 @@ class MainRepo {
     suspend fun addLastMessage(
         lastMessage: LastMessage,
         currentUserID: String,
-        receiverID: String
+        receiverID: String,
     ) {
-        fireRepo.addLastMessage(lastMessage, currentUserID, receiverID)
+        fireRepo.addLastMessage(lastMessage, currentUserID, receiverID, authRepo.getUsername()!!)
     }
 }

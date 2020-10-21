@@ -8,6 +8,7 @@ import com.fruitPunchSamurai.firechat.models.LastMessage
 import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.models.User
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 object RecyclerOptions {
 
@@ -36,7 +37,7 @@ object RecyclerOptions {
             .setLifecycleOwner(lifecycleOwner)
             .setQuery(
                 rootCollection.collection("Messages").document(userID).collection(receiverID)
-                    .orderBy("tms"), Message::class.java
+                    .orderBy("tms", Query.Direction.DESCENDING), Message::class.java
             ).build()
 
     fun getLastMessagesOption(

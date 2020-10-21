@@ -17,7 +17,7 @@ import com.fruitPunchSamurai.firechat.databinding.ChatRecyclerBinding
 import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.others.RecyclerOptions
 import com.fruitPunchSamurai.firechat.viewModels.ChatViewModel
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class ChatFrag : Fragment() {
@@ -31,6 +31,7 @@ class ChatFrag : Fragment() {
     private val args: ChatFragArgs by navArgs()
 
     private lateinit var receiverID: String
+    private lateinit var receiverName: String
     lateinit var adapter: FirestoreRecyclerAdapter<Message, Holder>
 
 
@@ -55,8 +56,11 @@ class ChatFrag : Fragment() {
 
     private fun bindData() {
         receiverID = args.receiverID
+        receiverName = args.receiverName
+
         initiateRecyclerView()
         initiateAdapter()
+
         b?.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = vm
@@ -70,13 +74,14 @@ class ChatFrag : Fragment() {
     }
 
     fun sendMessage() {
-        MainScope().launch {
-            vm.sendMessage(receiverID)
+        GlobalScope.launch {
+            vm.sendMessage(receiverID, receiverName)
         }
     }
 
     private fun initiateRecyclerView() {
         val man = LinearLayoutManager(requireActivity()).apply {
+            reverseLayout = true
             stackFromEnd = true
         }
         b?.recycler?.layoutManager = man
