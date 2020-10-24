@@ -41,7 +41,7 @@ class ChatViewModel : ViewModel() {
                 contactName = receiverName
             }
 
-            repo.addMessage(message, auth.getUID()!!, receiverID)
+            repo.addMessage(message, message.ownerID, receiverID)
             repo.addLastMessage(lastMessage, auth.getUID()!!, receiverID)
             state.postValue(MyState.Finished())
             newMessage.postValue("")

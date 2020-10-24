@@ -34,7 +34,9 @@ class FireMessagesRepo {
             .document(receiverID).set(lastMessage.apply { read = true }).await()
         lastMessagesColl.document(receiverID).collection("LastMessages")
             .document(currentUserID)
-            .set(lastMessage.apply { read = false;contactName = currentUsername }).await()
+            .set(lastMessage.apply {
+                read = false;contactName = currentUsername;contactID = currentUserID
+            }).await()
     }
 
 }

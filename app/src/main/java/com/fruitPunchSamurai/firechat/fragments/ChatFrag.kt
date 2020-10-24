@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,7 +32,7 @@ class ChatFrag : Fragment() {
     private val args: ChatFragArgs by navArgs()
 
     private lateinit var receiverID: String
-    private lateinit var receiverName: String
+    lateinit var receiverName: String
     lateinit var adapter: FirestoreRecyclerAdapter<Message, Holder>
 
 
@@ -58,6 +59,9 @@ class ChatFrag : Fragment() {
         receiverID = args.receiverID
         receiverName = args.receiverName
 
+        println(receiverID)
+        println(receiverName)
+
         initiateRecyclerView()
         initiateAdapter()
 
@@ -71,6 +75,10 @@ class ChatFrag : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         b = null
+    }
+
+    fun goBack() {
+        findNavController().popBackStack()
     }
 
     fun sendMessage() {

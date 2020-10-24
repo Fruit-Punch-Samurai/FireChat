@@ -23,8 +23,7 @@ object RecyclerOptions {
         return FirestorePagingOptions.Builder<User>()
             .setLifecycleOwner(lifecycleOwner)
             .setQuery(
-                rootCollection.collection("Users").orderBy("name"),
-                config, User::class.java
+                rootCollection.collection("Users").orderBy("name"), config, User::class.java
             ).build()
     }
 
