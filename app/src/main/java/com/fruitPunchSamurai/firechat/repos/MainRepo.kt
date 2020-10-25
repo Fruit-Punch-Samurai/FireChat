@@ -31,4 +31,9 @@ class MainRepo {
     ) {
         fireRepo.addLastMessage(lastMessage, currentUserID, receiverID, authRepo.getUsername()!!)
     }
+
+    fun setLastMessageAsRead(currentUserID: String, contactID: String) {
+        fireRepo.setLastMessageAsRead(currentUserID, contactID)
+    }
+
 }

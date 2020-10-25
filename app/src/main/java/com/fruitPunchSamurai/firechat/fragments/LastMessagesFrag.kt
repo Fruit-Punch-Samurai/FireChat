@@ -62,6 +62,7 @@ class LastMessagesFrag : Fragment() {
 
     fun goToChatFrag(lastMessage: LastMessage?) {
         if (lastMessage == null) return
+        if (!lastMessage.read) vm.setMessageAsRead(lastMessage)
         val receiverID = lastMessage.contactID
         val receiverName = lastMessage.contactName
         val action = ViewPagerFragDirections.actionViewPagerFragToChatFrag(receiverID, receiverName)

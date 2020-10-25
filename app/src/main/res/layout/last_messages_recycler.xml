@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,34 +10,57 @@
             type="com.fruitPunchSamurai.firechat.models.LastMessage" />
     </data>
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/default_background"
-        android:paddingStart="8dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="4dp">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/usernameTxt"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="@{lastMessage.contactName}"
-            android:textSize="22sp"
-            tools:text="Username" />
+            android:layout_margin="4dp"
+            android:background="@drawable/default_background"
+            android:padding="8dp"
+            tools:ignore="UselessParent">
 
-        <TextView
-            android:id="@+id/lastMessageTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/usernameTxt"
-            android:layout_alignStart="@+id/usernameTxt"
-            android:maxLines="2"
-            android:text="@{lastMessage.msg}"
-            android:textSize="14sp"
-            tools:text="Last Message" />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/usernameTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@+id/readImage"
+                android:text="@{lastMessage.contactName}"
+                android:textSize="22sp"
+                tools:text="@string/users" />
+
+            <TextView
+                android:id="@+id/lastMessageTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/usernameTxt"
+                android:layout_alignEnd="@+id/usernameTxt"
+                android:layout_alignParentStart="true"
+                android:singleLine="true"
+                android:text="@{lastMessage.msg}"
+                android:textSize="14sp"
+                tools:text="@string/newMessage" />
+
+            <ImageView
+                android:id="@+id/readImage"
+                setMessageReadStatus="@{lastMessage}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/lastMessageTxt"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:srcCompat="@drawable/red_circle"
+                tools:ignore="ContentDescription" />
+        </RelativeLayout>
+    </FrameLayout>
+
 </layout>

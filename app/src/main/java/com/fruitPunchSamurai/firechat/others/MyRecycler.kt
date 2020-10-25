@@ -1,9 +1,11 @@
 package com.fruitPunchSamurai.firechat.others
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.fruitPunchSamurai.firechat.models.LastMessage
 import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.repos.AuthRepo
 
@@ -16,6 +18,12 @@ object MyRecycler {
             this.setHasFixedSize(true)
             this.adapter = adapter
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter(value = ["setMessageReadStatus"])
+    fun ImageView.bindMessageReadState(lastMessage: LastMessage) {
+        this.visibility = if (lastMessage.read) View.INVISIBLE else View.VISIBLE
     }
 
     @JvmStatic
