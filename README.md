@@ -1,12 +1,12 @@
 # FireChat
 Android one-to-one realtime chatting app made with Firebase
 
-## Kotlin
+#### #Kotlin
 
-## Firestore
+#### #Firestore
 
-## MVVM architecture (Kind of)
+#### #MVVM architecture (Kind of)
 
-## DataBinding
+#### #DataBinding
 
-## Android Nav components
+#### #Android Nav components
