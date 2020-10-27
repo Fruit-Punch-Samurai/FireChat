@@ -47,7 +47,8 @@
     <fragment
         android:id="@+id/signUpFrag"
         android:name="com.fruitPunchSamurai.firechat.fragments.SignUpFrag"
-        android:label="SignUpFrag">
+        android:label="SignUpFrag"
+        tools:layout="@layout/sign_up_fragment">
         <action
             android:id="@+id/action_signUpFrag_to_viewPagerFrag"
             app:destination="@id/viewPagerFrag"
@@ -57,7 +58,8 @@
     <fragment
         android:id="@+id/chatFrag"
         android:name="com.fruitPunchSamurai.firechat.fragments.ChatFrag"
-        android:label="ChatFrag">
+        android:label="ChatFrag"
+        tools:layout="@layout/chat_fragment">
         <argument
             android:name="receiverID"
             app:argType="string" />

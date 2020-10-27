@@ -2,14 +2,13 @@ package com.fruitPunchSamurai.firechat.repos
 
 import com.fruitPunchSamurai.firechat.models.LastMessage
 import com.fruitPunchSamurai.firechat.models.Message
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
 class FireMessagesRepo {
-
-    //TODO: Make all duplicate messages have same doc ID
 
     private enum class FIELDS(val field: String) {
         MESSAGE("msg"),
@@ -20,6 +19,7 @@ class FireMessagesRepo {
     }
 
     private val fire = Firebase.firestore
+    private val rdb = Firebase.database
     private val messagesColl = fire.collection("Messages")
     private val lastMessagesColl = fire.collection("LastMessages")
 
@@ -32,8 +32,11 @@ class FireMessagesRepo {
     }
 
     suspend fun addMessage(message: Message, currentUserID: String, receiverID: String) {
-        messagesColl.document(currentUserID).collection(receiverID).document().set(message).await()
-        messagesColl.document(receiverID).collection(currentUserID).document().set(message).await()
+        val pushValue = rdb.getReference("Messages").push().key ?: return
+        messagesColl.document(currentUserID).collection(receiverID).document(pushValue).set(message)
+            .await()
+        messagesColl.document(receiverID).collection(currentUserID).document(pushValue).set(message)
+            .await()
     }
 
     suspend fun addLastMessage(
