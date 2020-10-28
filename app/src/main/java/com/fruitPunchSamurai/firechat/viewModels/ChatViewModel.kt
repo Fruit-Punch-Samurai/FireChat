@@ -25,30 +25,31 @@ class ChatViewModel : ViewModel() {
         state.postValue(MyState.Loading())
 
         try {
-            val message = Message()
-            val lastMessage = LastMessage()
+            val message = createMessage()
+            val lastMessage = createLastMessage(receiverID, receiverName)
 
-            message.apply {
-                date = DateTime.now(DateTimeZone.UTC).toString()
-                msg = newMessage.value!!
-                ownerID = auth.getUID()!!
-            }
-
-            lastMessage.apply {
-                msg = newMessage.value!!
-                contactID = receiverID
-                read = false
-                contactName = receiverName
-            }
-
+            newMessage.postValue("")
             repo.addMessage(message, message.ownerID, receiverID)
             repo.addLastMessage(lastMessage, auth.getUID()!!, receiverID)
             state.postValue(MyState.Finished())
-            newMessage.postValue("")
         } catch (e: Exception) {
             e.printStackTrace()
             state.postValue(MyState.Error(e.localizedMessage))
         }
     }
+
+    private fun createMessage() = Message().apply {
+        date = DateTime.now(DateTimeZone.UTC).toString()
+        msg = newMessage.value!!
+        ownerID = auth.getUID()!!
+    }
+
+    private fun createLastMessage(receiverID: String, receiverName: String) = LastMessage().apply {
+        msg = newMessage.value!!
+        contactID = receiverID
+        read = false
+        contactName = receiverName
+    }
+
 
 }

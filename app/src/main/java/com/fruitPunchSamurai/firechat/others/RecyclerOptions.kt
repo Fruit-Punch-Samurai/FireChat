@@ -48,7 +48,7 @@ object RecyclerOptions {
             .setQuery(
                 rootCollection.collection("LastMessages")
                     .document(userID).collection("LastMessages")
-                    .orderBy("tms"), LastMessage::class.java
+                    .orderBy("tms", Query.Direction.DESCENDING), LastMessage::class.java
             ).build()
 
 }
