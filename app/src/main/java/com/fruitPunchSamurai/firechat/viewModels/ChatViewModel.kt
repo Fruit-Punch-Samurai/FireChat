@@ -29,8 +29,8 @@ class ChatViewModel : ViewModel() {
             val lastMessage = createLastMessage(receiverID, receiverName)
 
             newMessage.postValue("")
-            repo.addMessage(message, message.ownerID, receiverID)
-            repo.addLastMessage(lastMessage, auth.getUID()!!, receiverID)
+            repo.addMessageAndLastMessage(message, lastMessage, receiverID)
+
             state.postValue(MyState.Finished())
         } catch (e: Exception) {
             e.printStackTrace()

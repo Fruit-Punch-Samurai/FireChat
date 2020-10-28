@@ -36,7 +36,7 @@ object RecyclerOptions {
             .setLifecycleOwner(lifecycleOwner)
             .setQuery(
                 rootCollection.collection("Messages").document(userID).collection(receiverID)
-                    .orderBy("tms", Query.Direction.DESCENDING), Message::class.java
+                    .orderBy("tms", Query.Direction.ASCENDING), Message::class.java
             ).build()
 
     fun getLastMessagesOption(

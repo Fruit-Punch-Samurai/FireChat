@@ -89,7 +89,6 @@ class ChatFrag : Fragment() {
 
     private fun initiateRecyclerView() {
         val man = LinearLayoutManager(requireActivity()).apply {
-            reverseLayout = true
             stackFromEnd = true
         }
         b?.recycler?.layoutManager = man

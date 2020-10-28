@@ -31,27 +31,40 @@ class FireMessagesRepo {
             .set(map, SetOptions.merge())
     }
 
-    suspend fun addMessage(message: Message, currentUserID: String, receiverID: String) {
-        val pushValue = rdb.getReference("Messages").push().key ?: return
-        messagesColl.document(currentUserID).collection(receiverID).document(pushValue).set(message)
-            .await()
-        messagesColl.document(receiverID).collection(currentUserID).document(pushValue).set(message)
-            .await()
-    }
-
-    suspend fun addLastMessage(
+    suspend fun addMessageAndLastMessage(
+        message: Message,
         lastMessage: LastMessage,
-        currentUserID: String,
         receiverID: String,
         currentUsername: String
     ) {
+        fire.runBatch {
+            addMessage(message, receiverID)
+            addLastMessage(lastMessage, message.ownerID, currentUsername)
+        }.await()
+    }
+
+    private fun addMessage(message: Message, receiverID: String) {
+        val pushValue = rdb.getReference("Messages").push().key ?: return
+        messagesColl.document(message.ownerID).collection(receiverID).document(pushValue)
+            .set(message)
+
+        messagesColl.document(receiverID).collection(message.ownerID).document(pushValue)
+            .set(message)
+
+    }
+
+    private fun addLastMessage(
+        lastMessage: LastMessage,
+        currentUserID: String,
+        currentUsername: String
+    ) {
         lastMessagesColl.document(currentUserID).collection("LastMessages")
-            .document(receiverID).set(lastMessage.apply { read = true }).await()
-        lastMessagesColl.document(receiverID).collection("LastMessages")
+            .document(lastMessage.contactID).set(lastMessage.apply { read = true })
+        lastMessagesColl.document(lastMessage.contactID).collection("LastMessages")
             .document(currentUserID)
             .set(lastMessage.apply {
                 read = false;contactName = currentUsername;contactID = currentUserID
-            }).await()
+            })
     }
 
 }

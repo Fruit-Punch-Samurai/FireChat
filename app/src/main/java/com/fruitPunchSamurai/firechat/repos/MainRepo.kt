@@ -20,16 +20,17 @@ class MainRepo {
         return snap.toObject<User>()
     }
 
-    suspend fun addMessage(message: Message, currentUserID: String, receiverID: String) {
-        fireRepo.addMessage(message, currentUserID, receiverID)
-    }
-
-    suspend fun addLastMessage(
+    suspend fun addMessageAndLastMessage(
+        message: Message,
         lastMessage: LastMessage,
-        currentUserID: String,
         receiverID: String,
     ) {
-        fireRepo.addLastMessage(lastMessage, currentUserID, receiverID, authRepo.getUsername()!!)
+        fireRepo.addMessageAndLastMessage(
+            message,
+            lastMessage,
+            receiverID,
+            authRepo.getUsername()!!
+        )
     }
 
     fun setLastMessageAsRead(currentUserID: String, contactID: String) {

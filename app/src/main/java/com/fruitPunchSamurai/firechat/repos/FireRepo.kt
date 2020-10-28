@@ -18,17 +18,13 @@ class FireRepo {
 
     suspend fun getUser(id: String?): DocumentSnapshot = usersRepo.getUser(id)
 
-    suspend fun addMessage(message: Message, currentUserID: String, receiverID: String) {
-        messagesRepo.addMessage(message, currentUserID, receiverID)
-    }
-
-    suspend fun addLastMessage(
+    suspend fun addMessageAndLastMessage(
+        message: Message,
         lastMessage: LastMessage,
-        currentUserID: String,
         receiverID: String,
-        currentUsername: String,
+        currentUsername: String
     ) {
-        messagesRepo.addLastMessage(lastMessage, currentUserID, receiverID, currentUsername)
+        messagesRepo.addMessageAndLastMessage(message, lastMessage, receiverID, currentUsername)
     }
 
     fun setLastMessageAsRead(currentUserID: String, contactID: String) {
