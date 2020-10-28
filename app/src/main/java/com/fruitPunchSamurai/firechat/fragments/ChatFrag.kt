@@ -18,7 +18,7 @@ import com.fruitPunchSamurai.firechat.databinding.ChatRecyclerBinding
 import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.others.RecyclerOptions
 import com.fruitPunchSamurai.firechat.viewModels.ChatViewModel
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class ChatFrag : Fragment() {
@@ -82,9 +82,10 @@ class ChatFrag : Fragment() {
     }
 
     fun sendMessage() {
-        GlobalScope.launch {
-            vm.sendMessage(receiverID, receiverName)
-        }
+        MainScope().launch { vm.sendMessage(receiverID, receiverName) }
+            .invokeOnCompletion {
+                b?.recycler?.smoothScrollToPosition(adapter.itemCount)
+            }
     }
 
     private fun initiateRecyclerView() {
