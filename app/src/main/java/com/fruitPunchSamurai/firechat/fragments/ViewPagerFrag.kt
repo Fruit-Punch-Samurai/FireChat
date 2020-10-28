@@ -4,17 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.adapters.ViewPagerAdapter
 import com.fruitPunchSamurai.firechat.databinding.ViewPagerFragmentBinding
+import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.viewModels.ViewPagerViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 class ViewPagerFrag : Fragment() {
-
-    //TODO: Bottom button to logout
 
     companion object {
         fun newInstance() = ViewPagerFrag()
@@ -29,6 +29,7 @@ class ViewPagerFrag : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = initiateDataBinder(container)
+        bindData()
         return view
     }
 
@@ -39,13 +40,30 @@ class ViewPagerFrag : Fragment() {
     }
 
     private fun initiateDataBinder(container: ViewGroup?): View? {
-        b = ViewPagerFragmentBinding.inflate(layoutInflater, container, false)
+        b = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.view_pager_fragment,
+            container,
+            false
+        ) as ViewPagerFragmentBinding
         return b?.root
+    }
+
+    private fun bindData() {
+        b?.apply {
+            frag = this@ViewPagerFrag
+            viewModel = vm
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         b = null
+    }
+
+    fun logout() {
+        vm.logout()
+        navigateTo(R.id.action_viewPagerFrag_to_signInFrag2)
     }
 
     private fun initiateViewPager() {
