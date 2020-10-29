@@ -70,9 +70,11 @@ class SignInFrag : Fragment() {
     private fun observeState() {
         vm.state.observe(viewLifecycleOwner, {
             when (it) {
+                is MyState.Idle -> {
+                    makeLayoutTouchable(true)
+                }
                 is MyState.Finished -> {
                     showSnackBar(it.msg)
-                    makeLayoutTouchable(true)
                     vm.setIdleState()
                 }
                 is MyState.Loading -> {
@@ -81,7 +83,6 @@ class SignInFrag : Fragment() {
                 }
                 is MyState.Error -> {
                     showSnackBar(it.msg)
-                    makeLayoutTouchable(true)
                     vm.setIdleState()
                 }
             }

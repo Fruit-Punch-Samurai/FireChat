@@ -16,9 +16,11 @@ import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.ChatFragmentBinding
 import com.fruitPunchSamurai.firechat.databinding.ChatRecyclerBinding
 import com.fruitPunchSamurai.firechat.models.Message
+import com.fruitPunchSamurai.firechat.others.MyFrag.showSnackBar
+import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.others.RecyclerOptions
 import com.fruitPunchSamurai.firechat.viewModels.ChatViewModel
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class ChatFrag : Fragment() {
@@ -72,6 +74,27 @@ class ChatFrag : Fragment() {
         }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        observeState()
+    }
+
+    private fun observeState() {
+        vm.state.observe(viewLifecycleOwner, {
+            when (it) {
+                is MyState.Error -> {
+                    showSnackBar(it.msg)
+                }
+                is MyState.Finished -> {
+                    b?.recycler?.smoothScrollToPosition(adapter.itemCount)
+                    vm.setIdleState()
+                }
+
+                else -> return@observe
+            }
+        })
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         b = null
@@ -82,10 +105,7 @@ class ChatFrag : Fragment() {
     }
 
     fun sendMessage() {
-        MainScope().launch { vm.sendMessage(receiverID, receiverName) }
-            .invokeOnCompletion {
-                b?.recycler?.smoothScrollToPosition(adapter.itemCount)
-            }
+        GlobalScope.launch { vm.sendMessage(receiverID, receiverName) }
     }
 
     private fun initiateRecyclerView() {
@@ -118,6 +138,4 @@ class ChatFrag : Fragment() {
             b.executePendingBindings()
         }
     }
-
-
 }

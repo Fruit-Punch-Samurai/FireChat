@@ -19,6 +19,8 @@ class ChatViewModel : ViewModel() {
 
     fun getCurrentUserID() = auth.getUID()!!
 
+    fun setIdleState() = state.postValue(MyState.Idle)
+
     suspend fun sendMessage(receiverID: String, receiverName: String) {
         if (newMessage.value.isNullOrBlank()) return
 
