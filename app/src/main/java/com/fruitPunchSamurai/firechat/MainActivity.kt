@@ -17,8 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityMainBinding.inflate(layoutInflater)
-        val view = b.root
-        setContentView(view)
+        setContentView(b.root)
 
         PreferencesManager.initialize(applicationContext)
         JodaTimeAndroid.init(this)

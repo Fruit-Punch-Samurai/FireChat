@@ -89,7 +89,6 @@ class ChatFrag : Fragment() {
                     b?.recycler?.smoothScrollToPosition(adapter.itemCount)
                     vm.setIdleState()
                 }
-
                 else -> return@observe
             }
         })

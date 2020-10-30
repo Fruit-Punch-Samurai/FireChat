@@ -1,32 +1,22 @@
 package com.fruitPunchSamurai.firechat.others
 
-import org.joda.time.DateTime
-import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 
 class DateConverter {
 
-    private val humanFormatter = DateTimeFormat.forPattern("dd-MMMM-yyyy HH:mm")
+    private val humanFormatter = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm")
+    private val rawFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
 
-    fun convertDateToLocal(rawDateTime: DateTime): String {
-        return rawDateTime.toLocalDateTime()
-            .toString(humanFormatter)
+    fun extractDateAndTime(dateTime: String): String {
+        return rawFormatter.parseDateTime(dateTime).toLocalDateTime().toString(humanFormatter)
     }
 
-    fun extractDate(convertedLocalDateTime: String): String {
-        return convertedLocalDateTime.substring(0, convertedLocalDateTime.length - 6)
+    fun extractDate(dateTime: String): String {
+        return rawFormatter.parseDateTime(dateTime).toLocalDate().toString()
     }
 
-    fun extractDate(convertedLocalDateTime: LocalDateTime): String {
-        return convertedLocalDateTime.toLocalDate().toString()
-    }
-
-    fun extractTime(convertedLocalDateTime: String): String? {
-        return convertedLocalDateTime.substring(convertedLocalDateTime.length - 5)
-    }
-
-    fun extractTime(convertedLocalDateTime: LocalDateTime): String? {
-        return convertedLocalDateTime.toLocalTime().toString()
+    fun extractTime(dateTime: String): String? {
+        return rawFormatter.parseDateTime(dateTime).toLocalTime().toString()
     }
 
 }
