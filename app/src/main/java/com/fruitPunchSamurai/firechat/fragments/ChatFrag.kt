@@ -16,6 +16,7 @@ import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.ChatFragmentBinding
 import com.fruitPunchSamurai.firechat.databinding.ChatRecyclerBinding
 import com.fruitPunchSamurai.firechat.models.Message
+import com.fruitPunchSamurai.firechat.others.DateConverter
 import com.fruitPunchSamurai.firechat.others.MyFrag.showSnackBar
 import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.others.RecyclerOptions
@@ -114,6 +115,16 @@ class ChatFrag : Fragment() {
         b?.recycler?.layoutManager = man
     }
 
+    private fun showDateSnackBar(binding: ChatRecyclerBinding) {
+        val message = binding.message ?: return
+        val rawDate = message.date
+        val date = DateConverter().extractDate(rawDate)
+        val time = DateConverter().extractTime(rawDate)
+
+        showSnackBar("${getString(R.string.messageSentOn)} $date ${getString(R.string.at)} $time")
+
+    }
+
     private fun initiateAdapter() {
         adapter = object : FirestoreRecyclerAdapter<Message, Holder>(
             RecyclerOptions.getMessagesOption(viewLifecycleOwner, vm.getCurrentUserID(), receiverID)
@@ -121,7 +132,7 @@ class ChatFrag : Fragment() {
 
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
                 val binding = ChatRecyclerBinding.inflate(LayoutInflater.from(parent.context))
-                return Holder(binding)
+                return Holder(binding) { showDateSnackBar(binding) }
             }
 
             override fun onBindViewHolder(holder: Holder, position: Int, model: Message) {
@@ -130,11 +141,20 @@ class ChatFrag : Fragment() {
         }
     }
 
-    class Holder(private val b: ChatRecyclerBinding) : RecyclerView.ViewHolder(b.root) {
+    class Holder(private val b: ChatRecyclerBinding, val clickFun: () -> Unit) :
+        RecyclerView.ViewHolder(b.root),
+        View.OnLongClickListener {
 
-        fun bindData(Message: Message) {
-            b.message = Message
+        fun bindData(message: Message) {
+            b.message = message
+            b.textView.setOnLongClickListener(this)
+            b.textView2.setOnLongClickListener(this)
             b.executePendingBindings()
+        }
+
+        override fun onLongClick(v: View?): Boolean {
+            clickFun()
+            return true
         }
     }
 }
