@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -73,11 +74,14 @@ class ChatFrag : Fragment() {
             viewModel = vm
             frag = this@ChatFrag
         }
+
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         observeState()
+        setOnClickListeners()
     }
 
     private fun observeState() {
@@ -93,6 +97,15 @@ class ChatFrag : Fragment() {
                 else -> return@observe
             }
         })
+    }
+
+    private fun setOnClickListeners() {
+        b?.newMessage?.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEND && !v.text.isNullOrBlank()) {
+                sendMessage()
+            }
+            true
+        }
     }
 
     override fun onDestroyView() {
