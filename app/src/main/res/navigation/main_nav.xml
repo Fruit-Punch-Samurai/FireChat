@@ -60,7 +60,7 @@
             app:popUpTo="@id/signInFrag"
             app:popUpToInclusive="true" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/chatFrag"
         android:name="com.fruitPunchSamurai.firechat.fragments.ChatFrag"
         android:label="ChatFrag"
@@ -71,5 +71,5 @@
         <argument
             android:name="receiverName"
             app:argType="string" />
-    </fragment>
+    </dialog>
 </navigation>

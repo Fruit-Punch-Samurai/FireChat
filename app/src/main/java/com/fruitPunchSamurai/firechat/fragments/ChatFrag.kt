@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -25,7 +25,7 @@ import com.fruitPunchSamurai.firechat.viewModels.ChatViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class ChatFrag : Fragment() {
+class ChatFrag : DialogFragment() {
 
     companion object {
         fun newInstance() = ChatFrag()
@@ -39,6 +39,11 @@ class ChatFrag : Fragment() {
     lateinit var receiverName: String
     lateinit var adapter: FirestoreRecyclerAdapter<Message, Holder>
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        /*Setting the Dialog to be FullSize */
+        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

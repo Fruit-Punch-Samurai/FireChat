@@ -23,8 +23,6 @@ class UsersFrag : Fragment() {
         fun newInstance() = UsersFrag()
     }
 
-    //TODO: State lost
-
     private val vm: UsersViewModel by viewModels()
     private var b: UsersFragmentBinding? = null
     lateinit var adapter: FirestorePagingAdapter<User, Holder>
