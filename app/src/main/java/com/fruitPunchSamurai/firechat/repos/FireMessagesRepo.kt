@@ -2,7 +2,6 @@ package com.fruitPunchSamurai.firechat.repos
 
 import com.fruitPunchSamurai.firechat.models.LastMessage
 import com.fruitPunchSamurai.firechat.models.Message
-import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -19,7 +18,6 @@ class FireMessagesRepo {
     }
 
     private val fire = Firebase.firestore
-    private val rdb = Firebase.database
     private val messagesColl = fire.collection("Messages")
     private val lastMessagesColl = fire.collection("LastMessages")
 
@@ -34,23 +32,21 @@ class FireMessagesRepo {
     suspend fun addMessageAndLastMessage(
         message: Message,
         lastMessage: LastMessage,
-        receiverID: String,
-        currentUsername: String
+        currentUsername: String,
+        pushValue: String
     ) {
         fire.runBatch {
-            addMessage(message, receiverID)
+            addMessage(message, lastMessage.contactID, pushValue)
             addLastMessage(lastMessage, message.ownerID, currentUsername)
         }.await()
     }
 
-    private fun addMessage(message: Message, receiverID: String) {
-        val pushValue = rdb.getReference("Messages").push().key ?: return
+    private fun addMessage(message: Message, receiverID: String, pushValue: String) {
         messagesColl.document(message.ownerID).collection(receiverID).document(pushValue)
             .set(message)
 
         messagesColl.document(receiverID).collection(message.ownerID).document(pushValue)
             .set(message)
-
     }
 
     private fun addLastMessage(

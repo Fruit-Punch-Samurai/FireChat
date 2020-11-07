@@ -12,8 +12,8 @@ import com.firebase.ui.firestore.paging.FirestorePagingAdapter
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.UsersFragmentBinding
 import com.fruitPunchSamurai.firechat.databinding.UsersRecyclerBinding
+import com.fruitPunchSamurai.firechat.ext.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.models.User
-import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.others.RecyclerOptions
 import com.fruitPunchSamurai.firechat.viewModels.UsersViewModel
 

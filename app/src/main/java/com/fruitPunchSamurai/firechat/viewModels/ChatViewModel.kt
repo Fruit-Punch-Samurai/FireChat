@@ -1,5 +1,6 @@
 package com.fruitPunchSamurai.firechat.viewModels
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fruitPunchSamurai.firechat.models.LastMessage
@@ -21,17 +22,17 @@ class ChatViewModel : ViewModel() {
 
     fun setIdleState() = state.postValue(MyState.Idle)
 
-    suspend fun sendMessage(receiverID: String, receiverName: String) {
+    suspend fun sendTextMessage(receiverID: String, receiverName: String) {
         if (newMessage.value.isNullOrBlank()) return
 
         state.postValue(MyState.Loading())
 
         try {
-            val message = createMessage()
+            val message = createTextMessage()
             val lastMessage = createLastMessage(receiverID, receiverName)
 
             newMessage.postValue("")
-            repo.addMessageAndLastMessage(message, lastMessage, receiverID)
+            repo.addTextMessageAndLastMessage(message, lastMessage)
 
             state.postValue(MyState.Finished())
         } catch (e: Exception) {
@@ -40,14 +41,37 @@ class ChatViewModel : ViewModel() {
         }
     }
 
-    private fun createMessage() = Message().apply {
+    suspend fun sendImageMessage(receiverID: String, receiverName: String, uri: Uri) {
+        state.postValue(MyState.Loading())
+
+        try {
+            val message = createImageMessage()
+            val lastMessage = createLastMessage(receiverID, receiverName)
+
+            repo.addImageMessageAndLastMessage(message, lastMessage, uri)
+
+            state.postValue(MyState.Finished())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            state.postValue(MyState.Error(e.localizedMessage))
+        }
+    }
+
+    private fun createTextMessage() = Message().apply {
         date = DateTime.now(DateTimeZone.UTC).toString()
         msg = newMessage.value!!
         ownerID = auth.getUID()!!
+        type = "text"
+    }
+
+    private fun createImageMessage() = Message().apply {
+        date = DateTime.now(DateTimeZone.UTC).toString()
+        ownerID = auth.getUID()!!
+        type = "image"
     }
 
     private fun createLastMessage(receiverID: String, receiverName: String) = LastMessage().apply {
-        msg = newMessage.value!!
+        msg = newMessage.value.toString()
         contactID = receiverID
         read = false
         contactName = receiverName

@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.fruitPunchSamurai.firechat.R
-import com.fruitPunchSamurai.firechat.others.MyAndroidViewModel.getString
+import com.fruitPunchSamurai.firechat.ext.MyAndroidViewModel.getString
 import com.fruitPunchSamurai.firechat.repos.AuthRepo
 
 class ViewPagerViewModel(application: Application) : AndroidViewModel(application) {

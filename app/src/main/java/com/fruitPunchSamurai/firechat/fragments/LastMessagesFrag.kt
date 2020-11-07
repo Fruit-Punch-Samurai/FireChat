@@ -12,8 +12,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.LastMessagesFragmentBinding
 import com.fruitPunchSamurai.firechat.databinding.LastMessagesRecyclerBinding
+import com.fruitPunchSamurai.firechat.ext.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.models.LastMessage
-import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.others.RecyclerOptions
 import com.fruitPunchSamurai.firechat.viewModels.LastMessagesViewModel
 

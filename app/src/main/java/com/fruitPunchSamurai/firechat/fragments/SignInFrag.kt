@@ -9,10 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.SignInFragmentBinding
-import com.fruitPunchSamurai.firechat.others.MyFrag.hideKeyboard
-import com.fruitPunchSamurai.firechat.others.MyFrag.makeLayoutTouchable
-import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
-import com.fruitPunchSamurai.firechat.others.MyFrag.showSnackBar
+import com.fruitPunchSamurai.firechat.ext.MyFrag.hideKeyboard
+import com.fruitPunchSamurai.firechat.ext.MyFrag.makeLayoutTouchable
+import com.fruitPunchSamurai.firechat.ext.MyFrag.navigateTo
+import com.fruitPunchSamurai.firechat.ext.MyFrag.showSnackBar
 import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.viewModels.SignInViewModel
 import kotlinx.coroutines.GlobalScope

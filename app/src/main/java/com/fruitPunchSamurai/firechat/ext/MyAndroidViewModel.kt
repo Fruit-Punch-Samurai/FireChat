@@ -1,4 +1,4 @@
-package com.fruitPunchSamurai.firechat.others
+package com.fruitPunchSamurai.firechat.ext
 
 import android.app.Application
 import android.content.Context

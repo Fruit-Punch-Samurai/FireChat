@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.adapters.ViewPagerAdapter
 import com.fruitPunchSamurai.firechat.databinding.ViewPagerFragmentBinding
-import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
+import com.fruitPunchSamurai.firechat.ext.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.viewModels.ViewPagerViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 

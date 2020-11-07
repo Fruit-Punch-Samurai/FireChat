@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.HomeFragmentBinding
-import com.fruitPunchSamurai.firechat.others.MyFrag.navigateTo
+import com.fruitPunchSamurai.firechat.ext.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.viewModels.HomeViewModel
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

@@ -1,5 +1,6 @@
 package com.fruitPunchSamurai.firechat.repos
 
+import android.net.Uri
 import com.fruitPunchSamurai.firechat.models.LastMessage
 import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.models.User
@@ -20,17 +21,29 @@ class MainRepo {
         return snap.toObject<User>()
     }
 
-    suspend fun addMessageAndLastMessage(
+    suspend fun addTextMessageAndLastMessage(
         message: Message,
         lastMessage: LastMessage,
-        receiverID: String,
     ) {
-        fireRepo.addMessageAndLastMessage(
+        if (!message.isText()) return
+
+        fireRepo.addTextMessageAndLastMessage(
             message,
             lastMessage,
-            receiverID,
             authRepo.getUsername()!!
         )
+    }
+
+    suspend fun addImageMessageAndLastMessage(
+        message: Message,
+        lastMessage: LastMessage,
+        uri: Uri
+    ) {
+        if (!message.isImage()) return
+
+        lastMessage.apply { msg = "Sent an attachment" }
+
+        fireRepo.addImageMessageAndLastMessage(message, lastMessage, authRepo.getUsername()!!, uri)
     }
 
     fun setLastMessageAsRead(currentUserID: String, contactID: String) {

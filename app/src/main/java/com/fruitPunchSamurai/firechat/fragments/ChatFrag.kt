@@ -16,9 +16,9 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.ChatFragmentBinding
 import com.fruitPunchSamurai.firechat.databinding.ChatRecyclerBinding
+import com.fruitPunchSamurai.firechat.ext.MyFrag.showSnackBar
 import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.others.DateConverter
-import com.fruitPunchSamurai.firechat.others.MyFrag.showSnackBar
 import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.others.RecyclerOptions
 import com.fruitPunchSamurai.firechat.viewModels.ChatViewModel
@@ -67,9 +67,6 @@ class ChatFrag : DialogFragment() {
     private fun bindData() {
         receiverID = args.receiverID
         receiverName = args.receiverName
-
-        println(receiverID)
-        println(receiverName)
 
         initiateRecyclerView()
         initiateAdapter()
@@ -123,7 +120,7 @@ class ChatFrag : DialogFragment() {
     }
 
     fun sendMessage() {
-        GlobalScope.launch { vm.sendMessage(receiverID, receiverName) }
+        GlobalScope.launch { vm.sendTextMessage(receiverID, receiverName) }
     }
 
     private fun initiateRecyclerView() {
