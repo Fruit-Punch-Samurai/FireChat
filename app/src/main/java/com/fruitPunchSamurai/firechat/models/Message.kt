@@ -15,7 +15,7 @@ data class Message(
 ) {
     constructor() : this("", "text", "", "", DateTime.now(DateTimeZone.UTC).toString(), Date())
 
-    fun isText() = type == "text"
-    fun isImage() = type == "image"
-    fun isVideo() = type == "video"
+    fun isTypeText() = type == "text"
+    fun isTypeImage() = type == "image"
+    fun isTypeVideo() = type == "video"
 }

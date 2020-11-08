@@ -15,9 +15,13 @@ class StorageRepo {
         currentUserID: String,
         receiverID: String
     ) {
-        storageRef.child(currentUserID).child(receiverID).child("$pushValue.pg").putFile(uri)
+        storageRef.child(currentUserID).child(receiverID).child("$pushValue.jpg").putFile(uri)
             .await()
-        storageRef.child(receiverID).child(currentUserID).child("$pushValue.pg").putFile(uri)
+        storageRef.child(receiverID).child(currentUserID).child("$pushValue.jpg").putFile(uri)
             .await()
     }
+
+    suspend fun getImage(mediaID: String, currentUserID: String, receiverID: String): Uri =
+        storageRef.child(currentUserID).child(receiverID).child(mediaID).downloadUrl.await()
+
 }

@@ -5,11 +5,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.fruitPunchSamurai.firechat.models.LastMessage
 import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.repos.AuthRepo
+import com.fruitPunchSamurai.firechat.repos.MainRepo
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 object MyRecycler {
+
+    private val repo: MainRepo = MainRepo()
 
     @JvmStatic
     @BindingAdapter(value = ["setAdapter"])
@@ -31,7 +37,7 @@ object MyRecycler {
     fun TextView.bindMyMessage(message: Message) {
         this.run {
             this.apply {
-                if (message.ownerID == AuthRepo().getUID() && message.isText()) {
+                if (message.ownerID == AuthRepo().getUID() && message.isTypeText()) {
                     text = message.msg
                     visibility = View.VISIBLE
                 } else {
@@ -42,12 +48,17 @@ object MyRecycler {
     }
 
     @JvmStatic
-    @BindingAdapter(value = ["bindMyImage"])
-    fun ImageView.bindMyImage(message: Message) {
+    @BindingAdapter(value = ["bindMyImage", "currentUserID", "receiverID"])
+    fun ImageView.bindMyImage(message: Message, currentUserID: String, receiverID: String) {
         this.run {
             visibility =
-                if (message.ownerID == AuthRepo().getUID() && message.isImage()) View.VISIBLE
-                else View.GONE
+                if (message.ownerID == AuthRepo().getUID() && message.isTypeImage()) {
+                    MainScope().launch {
+                        val uri = repo.getImage(message.mediaID, currentUserID, receiverID)
+                        Glide.with(this@run).load(uri).into(this@run)
+                    }
+                    View.VISIBLE
+                } else View.GONE
         }
     }
 
@@ -55,7 +66,7 @@ object MyRecycler {
     @BindingAdapter(value = ["bindReceiverMessage"])
     fun TextView.bindReceiverMessage(message: Message) {
         this.run {
-            if (message.ownerID != AuthRepo().getUID() && message.isText()) {
+            if (message.ownerID != AuthRepo().getUID() && message.isTypeText()) {
                 text = message.msg
                 visibility = View.VISIBLE
             } else {
@@ -69,7 +80,7 @@ object MyRecycler {
     fun ImageView.bindReceiverImage(message: Message) {
         this.run {
             visibility =
-                if (message.ownerID != AuthRepo().getUID() && message.isImage()) View.VISIBLE
+                if (message.ownerID != AuthRepo().getUID() && message.isTypeImage()) View.VISIBLE
                 else View.GONE
         }
     }

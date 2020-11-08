@@ -7,6 +7,14 @@
         <variable
             name="message"
             type="com.fruitPunchSamurai.firechat.models.Message" />
+
+        <variable
+            name="currentUserID"
+            type="String" />
+
+        <variable
+            name="receiverID"
+            type="String" />
     </data>
 
     <RelativeLayout
@@ -49,7 +57,9 @@
             android:background="@drawable/my_message_background"
             android:padding="4dp"
             android:scaleType="centerInside"
-            app:bindMyImage="@{message}" />
+            app:bindMyImage="@{message}"
+            app:currentUserID="@{currentUserID}"
+            app:receiverID="@{receiverID}" />
 
         <ImageView
             android:id="@+id/imageView2"

@@ -21,11 +21,15 @@ class MainRepo {
         return snap.toObject<User>()
     }
 
+    suspend fun getImage(mediaID: String, currentUserID: String, receiverID: String) =
+        fireRepo.getImage(mediaID, currentUserID, receiverID)
+
+
     suspend fun addTextMessageAndLastMessage(
         message: Message,
         lastMessage: LastMessage,
     ) {
-        if (!message.isText()) return
+        if (!message.isTypeText()) return
 
         fireRepo.addTextMessageAndLastMessage(
             message,
@@ -39,7 +43,7 @@ class MainRepo {
         lastMessage: LastMessage,
         uri: Uri
     ) {
-        if (!message.isImage()) return
+        if (!message.isTypeImage()) return
 
         lastMessage.apply { msg = "Sent an attachment" }
 

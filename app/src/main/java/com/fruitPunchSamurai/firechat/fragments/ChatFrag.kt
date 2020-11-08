@@ -1,5 +1,7 @@
 package com.fruitPunchSamurai.firechat.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +39,7 @@ class ChatFrag : DialogFragment() {
 
     private lateinit var receiverID: String
     lateinit var receiverName: String
+    private val IMAGE_REQUEST = 1
     lateinit var adapter: FirestoreRecyclerAdapter<Message, Holder>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +72,7 @@ class ChatFrag : DialogFragment() {
         receiverName = args.receiverName
 
         initiateRecyclerView()
-        initiateAdapter()
+        initiateAdapter(vm.getCurrentUserID(), receiverID)
 
         b?.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -119,6 +122,23 @@ class ChatFrag : DialogFragment() {
         findNavController().popBackStack()
     }
 
+    fun chooseImage() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            GlobalScope.launch {
+                val uri = data.data ?: return@launch
+                vm.sendImageMessage(receiverID, receiverName, uri)
+            }
+        }
+    }
+
     fun sendMessage() {
         GlobalScope.launch { vm.sendTextMessage(receiverID, receiverName) }
     }
@@ -140,7 +160,7 @@ class ChatFrag : DialogFragment() {
 
     }
 
-    private fun initiateAdapter() {
+    private fun initiateAdapter(currentUserID: String, receiverID: String) {
         adapter = object : FirestoreRecyclerAdapter<Message, Holder>(
             RecyclerOptions.getMessagesOption(viewLifecycleOwner, vm.getCurrentUserID(), receiverID)
         ) {
@@ -151,7 +171,7 @@ class ChatFrag : DialogFragment() {
             }
 
             override fun onBindViewHolder(holder: Holder, position: Int, model: Message) {
-                holder.bindData(model)
+                holder.bindData(model, currentUserID, receiverID)
             }
         }
     }
@@ -160,8 +180,10 @@ class ChatFrag : DialogFragment() {
         RecyclerView.ViewHolder(b.root),
         View.OnLongClickListener {
 
-        fun bindData(message: Message) {
+        fun bindData(message: Message, currentUSerID: String, receiverID: String) {
             b.message = message
+            b.currentUserID = currentUSerID
+            b.receiverID = receiverID
             b.textView.setOnLongClickListener(this)
             b.textView2.setOnLongClickListener(this)
             b.executePendingBindings()
