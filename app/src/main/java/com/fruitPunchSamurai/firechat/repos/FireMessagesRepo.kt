@@ -22,11 +22,8 @@ class FireMessagesRepo {
     private val lastMessagesColl = fire.collection("LastMessages")
 
     fun setLastMessageAsRead(currentUserID: String, contactID: String) {
-        val map = HashMap<String, Any>()
-        map["read"] = true
-
         lastMessagesColl.document(currentUserID).collection("LastMessages").document(contactID)
-            .set(map, SetOptions.merge())
+            .set(mapOf(Pair("read", true)), SetOptions.merge())
     }
 
     suspend fun addMessageAndLastMessage(

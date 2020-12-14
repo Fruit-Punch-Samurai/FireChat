@@ -23,6 +23,14 @@ class FireRepo {
 
     suspend fun getUser(id: String?): DocumentSnapshot = usersRepo.getUser(id)
 
+    suspend fun getImage(mediaID: String, currentUserID: String, receiverID: String) =
+        storageRepo.getImage(mediaID, currentUserID, receiverID)
+
+
+    fun setLastMessageAsRead(currentUserID: String, contactID: String) {
+        messagesRepo.setLastMessageAsRead(currentUserID, contactID)
+    }
+
     suspend fun addTextMessageAndLastMessage(
         message: Message,
         lastMessage: LastMessage,
@@ -38,6 +46,7 @@ class FireRepo {
         )
     }
 
+    /**Leave uri null if there is no media to be added*/
     suspend fun addImageMessageAndLastMessage(
         message: Message,
         lastMessage: LastMessage,
@@ -62,14 +71,6 @@ class FireRepo {
             currentUsername,
             pushValue
         )
-    }
-
-    suspend fun getImage(mediaID: String, currentUserID: String, receiverID: String) =
-        storageRepo.getImage(mediaID, currentUserID, receiverID)
-
-
-    fun setLastMessageAsRead(currentUserID: String, contactID: String) {
-        messagesRepo.setLastMessageAsRead(currentUserID, contactID)
     }
 
 

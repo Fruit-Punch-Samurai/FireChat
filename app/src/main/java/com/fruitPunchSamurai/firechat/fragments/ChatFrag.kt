@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.ChatFragmentBinding
@@ -23,8 +24,11 @@ import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.others.DateConverter
 import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.others.RecyclerOptions
+import com.fruitPunchSamurai.firechat.repos.AuthRepo
+import com.fruitPunchSamurai.firechat.repos.MainRepo
 import com.fruitPunchSamurai.firechat.viewModels.ChatViewModel
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class ChatFrag : DialogFragment() {
@@ -39,7 +43,7 @@ class ChatFrag : DialogFragment() {
 
     private lateinit var receiverID: String
     lateinit var receiverName: String
-    private val IMAGE_REQUEST = 1
+    private val imageRequestCode = 1
     lateinit var adapter: FirestoreRecyclerAdapter<Message, Holder>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +76,7 @@ class ChatFrag : DialogFragment() {
         receiverName = args.receiverName
 
         initiateRecyclerView()
-        initiateAdapter(vm.getCurrentUserID(), receiverID)
+        initiateAdapter(receiverID)
 
         b?.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -126,12 +130,12 @@ class ChatFrag : DialogFragment() {
         val intent = Intent()
         intent.action = Intent.ACTION_GET_CONTENT
         intent.type = "image/*"
-        startActivityForResult(intent, IMAGE_REQUEST)
+        startActivityForResult(intent, imageRequestCode)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == imageRequestCode && resultCode == Activity.RESULT_OK && data != null) {
             GlobalScope.launch {
                 val uri = data.data ?: return@launch
                 vm.sendImageMessage(receiverID, receiverName, uri)
@@ -160,7 +164,7 @@ class ChatFrag : DialogFragment() {
 
     }
 
-    private fun initiateAdapter(currentUserID: String, receiverID: String) {
+    private fun initiateAdapter(receiverID: String) {
         adapter = object : FirestoreRecyclerAdapter<Message, Holder>(
             RecyclerOptions.getMessagesOption(viewLifecycleOwner, vm.getCurrentUserID(), receiverID)
         ) {
@@ -171,7 +175,7 @@ class ChatFrag : DialogFragment() {
             }
 
             override fun onBindViewHolder(holder: Holder, position: Int, model: Message) {
-                holder.bindData(model, currentUserID, receiverID)
+                holder.bindData(model, receiverID)
             }
         }
     }
@@ -180,13 +184,47 @@ class ChatFrag : DialogFragment() {
         RecyclerView.ViewHolder(b.root),
         View.OnLongClickListener {
 
-        fun bindData(message: Message, currentUSerID: String, receiverID: String) {
+        fun bindData(message: Message, receiverID: String) {
             b.message = message
-            b.currentUserID = currentUSerID
-            b.receiverID = receiverID
             b.textView.setOnLongClickListener(this)
             b.textView2.setOnLongClickListener(this)
             b.executePendingBindings()
+
+            setImage(message, receiverID)
+        }
+
+        private fun setImage(message: Message, receiverID: String) {
+            b.imageView.run {
+                visibility =
+                    if (message.ownerID == AuthRepo().getUID() && message.typeIsImage()) {
+                        MainScope().launch {
+                            val uri =
+                                MainRepo().getImage(
+                                    message.mediaID,
+                                    AuthRepo().getUID()!!,
+                                    receiverID
+                                )
+                            Glide.with(this@run).load(uri).into(this@run)
+                        }
+                        View.VISIBLE
+                    } else View.GONE
+            }
+
+            b.imageView2.run {
+                visibility =
+                    if (message.ownerID != AuthRepo().getUID() && message.typeIsImage()) {
+                        MainScope().launch {
+                            val uri =
+                                MainRepo().getImage(
+                                    message.mediaID,
+                                    AuthRepo().getUID()!!,
+                                    receiverID
+                                )
+                            Glide.with(this@run).load(uri).into(this@run)
+                        }
+                        View.VISIBLE
+                    } else View.GONE
+            }
         }
 
         override fun onLongClick(v: View?): Boolean {

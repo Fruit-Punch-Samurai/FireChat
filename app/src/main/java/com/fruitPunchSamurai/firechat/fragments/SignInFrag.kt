@@ -74,6 +74,7 @@ class SignInFrag : Fragment() {
                     makeLayoutTouchable(true)
                 }
                 is MyState.Finished -> {
+                    makeLayoutTouchable(true)
                     showSnackBar(it.msg)
                     vm.setIdleState()
                 }

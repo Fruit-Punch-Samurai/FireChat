@@ -8,7 +8,8 @@ data class LastMessage(
     var contactID: String,
     var contactName: String,
     var read: Boolean = true,
-    @ServerTimestamp val tms: Date
+    //TODO: Create date here or in other constructor
+    @ServerTimestamp val tms: Date = Date()
 ) {
-    constructor() : this("", "", "", tms = Date())
+    constructor() : this("", "", "")
 }
