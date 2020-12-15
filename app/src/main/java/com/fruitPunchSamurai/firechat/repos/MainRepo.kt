@@ -25,8 +25,8 @@ class MainRepo {
         fireRepo.setLastMessageAsRead(currentUserID, contactID)
 
 
-    suspend fun getImage(mediaID: String, currentUserID: String, receiverID: String) =
-        fireRepo.getImage(mediaID, currentUserID, receiverID)
+    suspend fun getImageURI(mediaID: String, receiverID: String) =
+        fireRepo.getImageURI(mediaID, authRepo.getUID()!!, receiverID)
 
     suspend fun addTextMessageAndLastMessage(
         message: Message,

@@ -23,8 +23,8 @@ class FireRepo {
 
     suspend fun getUser(id: String?): DocumentSnapshot = usersRepo.getUser(id)
 
-    suspend fun getImage(mediaID: String, currentUserID: String, receiverID: String) =
-        storageRepo.getImage(mediaID, currentUserID, receiverID)
+    suspend fun getImageURI(mediaID: String, currentUserID: String, receiverID: String) =
+        storageRepo.getImageURI(mediaID, currentUserID, receiverID)
 
 
     fun setLastMessageAsRead(currentUserID: String, contactID: String) {

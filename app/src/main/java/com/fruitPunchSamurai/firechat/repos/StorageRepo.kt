@@ -21,7 +21,7 @@ class StorageRepo {
             .await()
     }
 
-    suspend fun getImage(mediaID: String, currentUserID: String, receiverID: String): Uri =
+    suspend fun getImageURI(mediaID: String, currentUserID: String, receiverID: String): Uri =
         storageRef.child(currentUserID).child(receiverID).child(mediaID).downloadUrl.await()
 
 }

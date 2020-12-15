@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.FullImageFragmentBinding
 import com.fruitPunchSamurai.firechat.fragments.ChatFrag
 import com.fruitPunchSamurai.firechat.viewModels.FullImageViewModel
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class FullImageFrag : DialogFragment() {
 
@@ -22,10 +24,12 @@ class FullImageFrag : DialogFragment() {
     private val vm: FullImageViewModel by viewModels()
     private var b: FullImageFragmentBinding? = null
     private val args: FullImageFragArgs by navArgs()
+    private lateinit var imageID: String
+    private lateinit var receiverID: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*Setting the Dialog to be FullSize */
+        /* Setting the Dialog to be FullSize */
         setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
 
@@ -39,21 +43,19 @@ class FullImageFrag : DialogFragment() {
     }
 
     private fun initiateDataBinder(container: ViewGroup?): View? {
-        b = DataBindingUtil.inflate(
-            layoutInflater,
-            R.layout.full_image_fragment,
-            container,
-            false
-        ) as FullImageFragmentBinding
+        b = FullImageFragmentBinding.inflate(layoutInflater, container, false)
         return b?.root
     }
 
     private fun bindData() {
+        imageID = args.imageID
+        receiverID = args.receiverID
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setOnClickListeners()
+        setImage()
     }
 
 
@@ -65,4 +67,10 @@ class FullImageFrag : DialogFragment() {
         b = null
     }
 
+    private fun setImage() {
+        MainScope().launch {
+            val uri = vm.getImageURI(imageID, receiverID)
+            Glide.with(this@FullImageFrag).load(uri).into(b!!.fullImage)
+        }
+    }
 }

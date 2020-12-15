@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.findFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -19,6 +20,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.ChatFragmentBinding
 import com.fruitPunchSamurai.firechat.databinding.ChatRecyclerBinding
+import com.fruitPunchSamurai.firechat.ext.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.ext.MyFrag.showSnackBar
 import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.others.DateConverter
@@ -27,6 +29,7 @@ import com.fruitPunchSamurai.firechat.others.RecyclerOptions
 import com.fruitPunchSamurai.firechat.repos.AuthRepo
 import com.fruitPunchSamurai.firechat.repos.MainRepo
 import com.fruitPunchSamurai.firechat.viewModels.ChatViewModel
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -48,7 +51,7 @@ class ChatFrag : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*Setting the Dialog to be FullSize */
+        /* Setting the Dialog to be FullSize */
         setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
 
@@ -154,16 +157,6 @@ class ChatFrag : DialogFragment() {
         b?.recycler?.layoutManager = man
     }
 
-    private fun showDateSnackBar(binding: ChatRecyclerBinding) {
-        val message = binding.message ?: return
-        val rawDate = message.date
-        val date = DateConverter().extractDate(rawDate)
-        val time = DateConverter().extractTime(rawDate)
-
-        showSnackBar("${getString(R.string.messageSentOn)} $date ${getString(R.string.at)} $time")
-
-    }
-
     private fun initiateAdapter(receiverID: String) {
         adapter = object : FirestoreRecyclerAdapter<Message, Holder>(
             RecyclerOptions.getMessagesOption(viewLifecycleOwner, vm.getCurrentUserID(), receiverID)
@@ -171,7 +164,7 @@ class ChatFrag : DialogFragment() {
 
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
                 val binding = ChatRecyclerBinding.inflate(LayoutInflater.from(parent.context))
-                return Holder(binding) { showDateSnackBar(binding) }
+                return Holder(binding)
             }
 
             override fun onBindViewHolder(holder: Holder, position: Int, model: Message) {
@@ -180,17 +173,25 @@ class ChatFrag : DialogFragment() {
         }
     }
 
-    class Holder(private val b: ChatRecyclerBinding, val clickFun: () -> Unit) :
+    class Holder(private val b: ChatRecyclerBinding) :
         RecyclerView.ViewHolder(b.root),
-        View.OnLongClickListener {
+        View.OnLongClickListener, View.OnClickListener {
 
-        fun bindData(message: Message, receiverID: String) {
-            b.message = message
-            b.textView.setOnLongClickListener(this)
-            b.textView2.setOnLongClickListener(this)
-            b.executePendingBindings()
+        fun bindData(msg: Message, receiverID: String) {
+            b.apply {
+                message = msg
 
-            setImage(message, receiverID)
+                textView.setOnLongClickListener(this@Holder)
+                textView2.setOnLongClickListener(this@Holder)
+                imageView2.setOnLongClickListener(this@Holder)
+                imageView.setOnLongClickListener(this@Holder)
+
+                imageView2.setOnClickListener(this@Holder)
+                imageView.setOnClickListener(this@Holder)
+
+                executePendingBindings()
+            }
+            setImage(msg, receiverID)
         }
 
         private fun setImage(message: Message, receiverID: String) {
@@ -199,27 +200,18 @@ class ChatFrag : DialogFragment() {
                     if (message.ownerID == AuthRepo().getUID() && message.typeIsImage()) {
                         MainScope().launch {
                             val uri =
-                                MainRepo().getImage(
-                                    message.mediaID,
-                                    AuthRepo().getUID()!!,
-                                    receiverID
-                                )
+                                MainRepo().getImageURI(message.mediaID, receiverID)
                             Glide.with(this@run).load(uri).into(this@run)
                         }
                         View.VISIBLE
                     } else View.GONE
             }
-
             b.imageView2.run {
                 visibility =
                     if (message.ownerID != AuthRepo().getUID() && message.typeIsImage()) {
                         MainScope().launch {
                             val uri =
-                                MainRepo().getImage(
-                                    message.mediaID,
-                                    AuthRepo().getUID()!!,
-                                    receiverID
-                                )
+                                MainRepo().getImageURI(message.mediaID, receiverID)
                             Glide.with(this@run).load(uri).into(this@run)
                         }
                         View.VISIBLE
@@ -227,9 +219,32 @@ class ChatFrag : DialogFragment() {
             }
         }
 
+        override fun onClick(v: View?) = goToFullImageFrag()
+
+
         override fun onLongClick(v: View?): Boolean {
-            clickFun()
+            showDateSnackbar()
             return true
+        }
+
+        private fun goToFullImageFrag() {
+            val msg = b.message
+            if (msg == null || !msg.typeIsImage()) return
+            val frag = b.root.findFragment<ChatFrag>()
+
+            val action =
+                ChatFragDirections.actionChatFragToFullImageFrag(msg.mediaID, frag.receiverID)
+            frag.navigateTo(action)
+        }
+
+        private fun showDateSnackbar() {
+            val message = b.message ?: return
+            val rawDate = message.date
+            val date = DateConverter().extractDate(rawDate)
+            val time = DateConverter().extractTime(rawDate)
+
+            val frag = b.root.findFragment<ChatFrag>()
+            frag.showSnackBar("${frag.getString(R.string.messageSentOn)} $date ${frag.getString(R.string.at)} $time")
         }
     }
 }
