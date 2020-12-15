@@ -70,7 +70,7 @@ class FullImageFrag : DialogFragment() {
     private fun setImage() {
         MainScope().launch {
             val uri = vm.getImageURI(imageID, receiverID)
-            Glide.with(this@FullImageFrag).load(uri).into(b!!.fullImage)
+            if (b?.fullImage != null) Glide.with(this@FullImageFrag).load(uri).into(b?.fullImage!!)
         }
     }
 }
