@@ -71,5 +71,17 @@
         <argument
             android:name="receiverName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_chatFrag_to_fullImageFrag"
+            app:destination="@id/fullImageFrag" />
     </dialog>
+    <fragment
+        android:id="@+id/fullImageFrag"
+        android:name="com.fruitPunchSamurai.firechat.repos.FullImageFrag"
+        android:label="full_image_fragment"
+        tools:layout="@layout/full_image_fragment">
+        <argument
+            android:name="imageID"
+            app:argType="string" />
+    </fragment>
 </navigation>

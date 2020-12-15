@@ -32,4 +32,6 @@
     <string name="wrongPassword">Wrong password, or user does not have a password</string>
     <string name="tooManyFailedLoginAttempts">Sign in blocked due to many failed login attempts, try again later</string>
     <string name="preference_file_name">com.fruitPunchSamurai.fireChat.prefs</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
