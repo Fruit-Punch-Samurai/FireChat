@@ -16,6 +16,8 @@
     <string name="signInFailed">Sign In failed</string>
     <string name="provideEmail">Please provide your email</string>
     <string name="undefinedError">Undefined Error</string>
+    <string name="downloadCompleted">Download completed</string>
+    <string name="download">Download</string>
     <string name="providePassword">Please provide your password</string>
     <string name="chooseStrongerPassword">Please choose a stronger password</string>
     <string name="emailAddressTaken">Email address already taken</string>

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".repos.FullImageFrag">
+    tools:context=".fragments.FullImageFrag">
 
 
-<com.jsibbold.zoomage.ZoomageView
+    <com.jsibbold.zoomage.ZoomageView
         android:id="@+id/fullImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,5 +20,15 @@
         app:zoomage_translatable="true"
         app:zoomage_zoomable="true"
         tools:src="@tools:sample/avatars" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="32dp"
+        android:contentDescription="@string/download"
+        android:src="@android:drawable/stat_sys_download_done"
+        app:backgroundTint="@android:color/white" />
 
 </FrameLayout>

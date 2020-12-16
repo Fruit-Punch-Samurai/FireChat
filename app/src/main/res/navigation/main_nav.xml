@@ -77,7 +77,7 @@
     </dialog>
     <dialog
         android:id="@+id/fullImageFrag"
-        android:name="com.fruitPunchSamurai.firechat.repos.FullImageFrag"
+        android:name="com.fruitPunchSamurai.firechat.fragments.FullImageFrag"
         android:label="full_image_fragment"
         tools:layout="@layout/full_image_fragment">
         <argument

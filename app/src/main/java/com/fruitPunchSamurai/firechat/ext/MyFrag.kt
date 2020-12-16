@@ -18,6 +18,7 @@ object MyFrag {
     }
 
     fun Fragment.showSnackBar(msg: String?) {
+        if (msg.isNullOrBlank()) return
         Snackbar.make(requireView(), msg.toString(), 2000).show()
     }
 
