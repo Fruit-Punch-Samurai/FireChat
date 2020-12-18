@@ -1,8 +1,11 @@
 package com.fruitPunchSamurai.firechat.repos
 
+import android.content.Context
 import android.net.Uri
+import androidx.core.graphics.drawable.toBitmap
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import io.github.rosariopfernandes.firecoil.FireCoil
 import kotlinx.coroutines.tasks.await
 
 class StorageRepo {
@@ -21,7 +24,13 @@ class StorageRepo {
             .await()
     }
 
-    suspend fun getImageURI(mediaID: String, currentUserID: String, receiverID: String): Uri =
-        storageRef.child(currentUserID).child(receiverID).child(mediaID).downloadUrl.await()
+    suspend fun getImage(
+        ctx: Context,
+        mediaID: String,
+        currentUserID: String,
+        receiverID: String
+    ) = FireCoil.get(
+        ctx, storageRef.child(currentUserID).child(receiverID).child(mediaID)
+    ).drawable?.toBitmap()
 
 }

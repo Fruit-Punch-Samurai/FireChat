@@ -4,18 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.FullImageFragmentBinding
 import com.fruitPunchSamurai.firechat.ext.MyFrag.showSnackBar
 import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.viewModels.FullImageViewModel
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+
 
 class FullImageFrag : DialogFragment() {
 
@@ -50,8 +50,8 @@ class FullImageFrag : DialogFragment() {
     }
 
     private fun bindData() {
-        imageID = args.imageID
-        receiverID = args.receiverID
+        vm.imageID = args.imageID
+        vm.receiverID = args.receiverID
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -76,7 +76,7 @@ class FullImageFrag : DialogFragment() {
     }
 
     private fun setOnClickListeners() {
-        b?.floatingActionButton?.setOnClickListener { saveImage() }
+        b?.floatingActionButton?.setOnClickListener { downloadImage() }
     }
 
     override fun onDestroyView() {
@@ -86,14 +86,16 @@ class FullImageFrag : DialogFragment() {
 
     private fun setImage() {
         MainScope().launch {
-            val uri = vm.getImageURI(imageID, receiverID)
-            if (b != null) Glide.with(this@FullImageFrag).load(uri).into(b!!.fullImage)
+            val bitmap = vm.getImage(requireContext())
+            if (b != null && bitmap != null) b!!.fullImage.setImageBitmap(bitmap)
         }
     }
 
-    private fun saveImage() {
-        val bitmap = b?.fullImage?.drawable?.toBitmap() ?: return
-        vm.saveImageToStorage(bitmap)
+    private fun downloadImage() {
+        GlobalScope.launch {
+            val bitmap = vm.getImage(requireContext()) ?: return@launch
+            vm.saveImageToStorage(bitmap)
+        }
     }
 
 

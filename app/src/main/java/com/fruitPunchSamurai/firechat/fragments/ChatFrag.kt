@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.findFragment
@@ -15,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.fruitPunchSamurai.firechat.R
 import com.fruitPunchSamurai.firechat.databinding.ChatFragmentBinding
@@ -195,32 +195,33 @@ class ChatFrag : DialogFragment() {
         }
 
         private fun setImage(message: Message, receiverID: String) {
-            b.imageView.run {
-                visibility =
-                    if (message.ownerID == AuthRepo().getUID() && message.typeIsImage()) {
-                        MainScope().launch {
-                            val uri =
-                                MainRepo().getImageURI(message.mediaID, receiverID)
-                            Glide.with(this@run).load(uri).into(this@run)
-                        }
-                        View.VISIBLE
-                    } else View.GONE
-            }
-            b.imageView2.run {
-                visibility =
-                    if (message.ownerID != AuthRepo().getUID() && message.typeIsImage()) {
-                        MainScope().launch {
-                            val uri =
-                                MainRepo().getImageURI(message.mediaID, receiverID)
-                            Glide.with(this@run).load(uri).into(this@run)
-                        }
-                        View.VISIBLE
-                    } else View.GONE
+            manageImageViewVisibility(message)
+
+            setImageViewBitmap(b.imageView, message, receiverID)
+            setImageViewBitmap(b.imageView2, message, receiverID)
+        }
+
+        private fun manageImageViewVisibility(message: Message) {
+            val isFromCurrentUser = message.ownerID == AuthRepo().getUID()
+            val isImage = message.typeIsImage()
+
+            b.imageView.visibility = if (isFromCurrentUser && isImage) View.VISIBLE else View.GONE
+            b.imageView2.visibility = if (!isFromCurrentUser && isImage) View.VISIBLE else View.GONE
+        }
+
+        private fun setImageViewBitmap(imgView: ImageView, message: Message, receiverID: String) {
+            if (imgView.visibility != View.VISIBLE) return
+
+            MainScope().launch {
+                imgView.setImageBitmap(getImage(imgView, message, receiverID))
             }
         }
 
-        override fun onClick(v: View?) = goToFullImageFrag()
+        private suspend fun getImage(v: View, message: Message, receiverID: String) =
+            MainRepo().getImage(v.context, message.mediaID, receiverID)
 
+
+        override fun onClick(v: View?) = goToFullImageFrag()
 
         override fun onLongClick(v: View?): Boolean {
             showDateSnackbar()
@@ -244,7 +245,13 @@ class ChatFrag : DialogFragment() {
             val time = DateConverter().extractTime(rawDate)
 
             val frag = b.root.findFragment<ChatFrag>()
-            frag.showSnackBar("${frag.getString(R.string.messageSentOn)} $date ${frag.getString(R.string.at)} $time")
+            frag.showSnackBar(
+                "${frag.getString(R.string.messageSentOn)} $date ${
+                    frag.getString(
+                        R.string.at
+                    )
+                } $time"
+            )
         }
     }
 }

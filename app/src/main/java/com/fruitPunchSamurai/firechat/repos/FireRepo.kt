@@ -1,5 +1,6 @@
 package com.fruitPunchSamurai.firechat.repos
 
+import android.content.Context
 import android.net.Uri
 import com.fruitPunchSamurai.firechat.models.LastMessage
 import com.fruitPunchSamurai.firechat.models.Message
@@ -23,8 +24,12 @@ class FireRepo {
 
     suspend fun getUser(id: String?): DocumentSnapshot = usersRepo.getUser(id)
 
-    suspend fun getImageURI(mediaID: String, currentUserID: String, receiverID: String) =
-        storageRepo.getImageURI(mediaID, currentUserID, receiverID)
+    suspend fun getImage(
+        ctx: Context,
+        mediaID: String,
+        currentUserID: String,
+        receiverID: String
+    ) = storageRepo.getImage(ctx, mediaID, currentUserID, receiverID)
 
 
     fun setLastMessageAsRead(currentUserID: String, contactID: String) {
