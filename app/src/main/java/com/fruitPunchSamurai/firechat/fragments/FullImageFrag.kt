@@ -14,20 +14,15 @@ import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.viewModels.FullImageViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 
 class FullImageFrag : DialogFragment() {
 
-    companion object {
-        fun newInstance() = ChatFrag()
-    }
-
     private val vm: FullImageViewModel by viewModels()
     private var b: FullImageFragmentBinding? = null
     private val args: FullImageFragArgs by navArgs()
-    private lateinit var imageID: String
-    private lateinit var receiverID: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,13 +59,15 @@ class FullImageFrag : DialogFragment() {
     private fun observeState() {
         vm.state.observe(viewLifecycleOwner, {
             when (it) {
-                is MyState.Error -> showSnackBar(it.msg)
+                is MyState.Idle -> b?.floatingActionButton?.show()
                 is MyState.Loading -> b?.floatingActionButton?.hide()
                 is MyState.Finished -> {
                     showSnackBar(it.msg)
                     vm.setIdleState()
                 }
-                is MyState.Idle -> b?.floatingActionButton?.show()
+                is MyState.Error -> {
+                    showSnackBar(it.msg);vm.setIdleState()
+                }
             }
         })
     }
@@ -81,6 +78,7 @@ class FullImageFrag : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        MainScope().cancel()
         b = null
     }
 
