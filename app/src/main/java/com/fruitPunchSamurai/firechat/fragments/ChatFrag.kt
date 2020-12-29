@@ -114,7 +114,7 @@ class ChatFrag : DialogFragment() {
     private fun setOnClickListeners() {
         b?.newMessage?.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEND && !v.text.isNullOrBlank()) {
-                sendMessage()
+                sendTextMessage()
             }
             true
         }
@@ -146,7 +146,7 @@ class ChatFrag : DialogFragment() {
         }
     }
 
-    fun sendMessage() {
+    fun sendTextMessage() {
         GlobalScope.launch { vm.sendTextMessage(receiverID, receiverName) }
     }
 

@@ -24,6 +24,8 @@ import java.io.FileOutputStream
 
 class FullImageViewModel(application: Application) : AndroidViewModel(application) {
 
+    //TODO: can't store image on Android 10+ when SD card is used as internal storage in emulator
+
     private val repo = MainRepo()
     lateinit var receiverID: String
     lateinit var imageID: String
