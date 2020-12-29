@@ -13,7 +13,7 @@ data class Message(
     var date: String,
     @ServerTimestamp val tms: Date
 ) {
-    constructor() : this("", "text", "", "", DateTime.now(DateTimeZone.UTC).toString(), Date())
+    constructor() : this("", TEXT, "", "", DateTime.now(DateTimeZone.UTC).toString(), Date())
 
     companion object Types {
         const val TEXT = "text"
