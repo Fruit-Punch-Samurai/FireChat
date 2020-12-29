@@ -61,13 +61,13 @@ class ChatViewModel : ViewModel() {
         date = DateTime.now(DateTimeZone.UTC).toString()
         msg = newMessage.value!!
         ownerID = auth.getUID()!!
-        type = "text"
+        type = Message.TEXT
     }
 
     private fun createImageMessage() = Message().apply {
         date = DateTime.now(DateTimeZone.UTC).toString()
         ownerID = auth.getUID()!!
-        type = "image"
+        type = Message.IMAGE
     }
 
     private fun createLastMessage(receiverID: String, receiverName: String) = LastMessage().apply {

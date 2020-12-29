@@ -18,9 +18,7 @@ class StorageRepo {
         currentUserID: String,
         receiverID: String
     ) {
-        storageRef.child(currentUserID).child(receiverID).child("$pushValue.jpg").putFile(uri)
-            .await()
-        storageRef.child(receiverID).child(currentUserID).child("$pushValue.jpg").putFile(uri)
+        storageRef.child(getPath(currentUserID, receiverID)).child("$pushValue.jpg").putFile(uri)
             .await()
     }
 
@@ -30,7 +28,21 @@ class StorageRepo {
         currentUserID: String,
         receiverID: String
     ) = FireCoil.get(
-        ctx, storageRef.child(currentUserID).child(receiverID).child(mediaID)
+        ctx, storageRef.child(getPath(currentUserID, receiverID)).child(mediaID)
     ).drawable?.toBitmap()
+
+
+    /* Sorts the users IDs alphabetically to create the path in which the media will be stored */
+    private fun getPath(currentUserID: String, receiverID: String): String {
+        var path = ""
+
+        ArrayList<String>().apply {
+            add(currentUserID)
+            add(receiverID)
+            sort()
+        }.forEach { path = "$path$it" }
+
+        return path
+    }
 
 }

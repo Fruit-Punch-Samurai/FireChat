@@ -51,16 +51,16 @@ class FireRepo {
         )
     }
 
-    /**Leave uri null if there is no media to be added*/
+    /** Leave uri null if there is no media to be added */
     suspend fun addImageMessageAndLastMessage(
         message: Message,
         lastMessage: LastMessage,
         currentUsername: String,
         uri: Uri? = null
     ) {
-        val pushValue = rdb.getReference("Messages").push().key ?: return
         if (uri == null) return
 
+        val pushValue = rdb.getReference("Messages").push().key ?: return
         message.apply { mediaID = "$pushValue.jpg" }
 
         storageRepo.addChatImageToStorage(
