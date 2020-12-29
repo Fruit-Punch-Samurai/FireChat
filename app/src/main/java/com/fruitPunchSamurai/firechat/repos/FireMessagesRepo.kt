@@ -51,13 +51,20 @@ class FireMessagesRepo {
         currentUserID: String,
         currentUsername: String
     ) {
+        val contactID = lastMessage.contactID
+
         lastMessagesColl.document(currentUserID).collection("LastMessages")
-            .document(lastMessage.contactID).set(lastMessage.apply { read = true })
-        lastMessagesColl.document(lastMessage.contactID).collection("LastMessages")
-            .document(currentUserID)
-            .set(lastMessage.apply {
-                read = false;contactName = currentUsername;contactID = currentUserID
-            })
+            .document(contactID).set(lastMessage.apply { read = true })
+
+
+        lastMessage.apply {
+            read = false
+            contactName = currentUsername
+            this.contactID = currentUserID
+        }
+
+        lastMessagesColl.document(contactID).collection("LastMessages")
+            .document(currentUserID).set(lastMessage)
     }
 
 }
