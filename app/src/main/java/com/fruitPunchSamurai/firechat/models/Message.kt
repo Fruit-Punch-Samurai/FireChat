@@ -15,7 +15,13 @@ data class Message(
 ) {
     constructor() : this("", "text", "", "", DateTime.now(DateTimeZone.UTC).toString(), Date())
 
-    fun typeIsText() = type == "text"
-    fun typeIsImage() = type == "image"
-    fun typeIsVideo() = type == "video"
+    companion object Types {
+        const val TEXT = "text"
+        const val IMAGE = "image"
+        const val VIDEO = "video"
+    }
+
+    fun typeIsText() = type == TEXT
+    fun typeIsImage() = type == IMAGE
+    fun typeIsVideo() = type == VIDEO
 }
