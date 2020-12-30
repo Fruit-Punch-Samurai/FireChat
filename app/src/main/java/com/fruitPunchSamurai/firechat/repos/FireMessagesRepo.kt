@@ -7,23 +7,21 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
-class FireMessagesRepo {
-
-    private enum class FIELDS(val field: String) {
-        MESSAGE("msg"),
-        OWNER("ownerID"),
-        DATE("date"),
-        TIMESTAMP("tms"),
-        READ("read")
-    }
+internal class FireMessagesRepo {
 
     private val fire = Firebase.firestore
     private val messagesColl = fire.collection("Messages")
-    private val lastMessagesColl = fire.collection("LastMessages")
+    private val lastMessagesColl = fire.collection(LAST_MESSAGES_COLL)
+
+    companion object FIELDS {
+        const val LAST_MESSAGES_COLL = "LastMessages"
+        const val READ =
+            "read" //read : Boolean --> defines if the LastMessage has been read or not.
+    }
 
     fun setLastMessageAsRead(currentUserID: String, contactID: String) {
-        lastMessagesColl.document(currentUserID).collection("LastMessages").document(contactID)
-            .set(mapOf(Pair("read", true)), SetOptions.merge())
+        lastMessagesColl.document(currentUserID).collection(LAST_MESSAGES_COLL).document(contactID)
+            .set(mapOf(Pair(READ, true)), SetOptions.merge())
     }
 
     suspend fun addMessageAndLastMessage(
@@ -53,7 +51,7 @@ class FireMessagesRepo {
     ) {
         val contactID = lastMessage.contactID
 
-        lastMessagesColl.document(currentUserID).collection("LastMessages")
+        lastMessagesColl.document(currentUserID).collection(LAST_MESSAGES_COLL)
             .document(contactID).set(lastMessage.apply { read = true })
 
 
@@ -63,7 +61,7 @@ class FireMessagesRepo {
             this.contactID = currentUserID
         }
 
-        lastMessagesColl.document(contactID).collection("LastMessages")
+        lastMessagesColl.document(contactID).collection(LAST_MESSAGES_COLL)
             .document(currentUserID).set(lastMessage)
     }
 
