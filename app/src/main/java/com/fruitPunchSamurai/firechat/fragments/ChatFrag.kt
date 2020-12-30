@@ -36,9 +36,7 @@ import kotlinx.coroutines.launch
 
 class ChatFrag : DialogFragment() {
 
-    companion object {
-        fun newInstance() = ChatFrag()
-    }
+    companion object;
 
     private val vm: ChatViewModel by viewModels()
     private var b: ChatFragmentBinding? = null

@@ -16,8 +16,6 @@ class FireRepo {
     private var messagesRepo = FireMessagesRepo()
     private var storageRepo = StorageRepo()
 
-    suspend fun getAllUsers() = usersRepo.getAllUsers()
-
     suspend fun addUser(user: User) {
         usersRepo.addUser(user)
     }

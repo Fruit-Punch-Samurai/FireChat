@@ -16,9 +16,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class ViewPagerFrag : Fragment() {
 
-    companion object {
-        fun newInstance() = ViewPagerFrag()
-    }
+    companion object;
 
     private var b: ViewPagerFragmentBinding? = null
     private val vm: ViewPagerViewModel by viewModels()

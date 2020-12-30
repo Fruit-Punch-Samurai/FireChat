@@ -76,7 +76,6 @@ class SignUpFrag : Fragment() {
             when (it) {
                 is MyState.Finished -> {
                     showSnackBar(it.msg)
-                    makeLayoutTouchable(true)
                     vm.setIdleState()
                 }
                 is MyState.Loading -> {
@@ -85,9 +84,9 @@ class SignUpFrag : Fragment() {
                 }
                 is MyState.Error -> {
                     showSnackBar(it.msg)
-                    makeLayoutTouchable(true)
                     vm.setIdleState()
                 }
+                is MyState.Idle -> makeLayoutTouchable(true)
             }
         })
     }

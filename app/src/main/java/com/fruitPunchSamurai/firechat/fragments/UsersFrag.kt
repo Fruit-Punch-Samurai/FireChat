@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter
 import com.fruitPunchSamurai.firechat.R
@@ -15,7 +14,6 @@ import com.fruitPunchSamurai.firechat.databinding.UsersRecyclerBinding
 import com.fruitPunchSamurai.firechat.ext.MyFrag.navigateTo
 import com.fruitPunchSamurai.firechat.models.User
 import com.fruitPunchSamurai.firechat.others.RecyclerOptions
-import com.fruitPunchSamurai.firechat.viewModels.UsersViewModel
 
 class UsersFrag : Fragment() {
 
@@ -23,7 +21,6 @@ class UsersFrag : Fragment() {
         fun newInstance() = UsersFrag()
     }
 
-    private val vm: UsersViewModel by viewModels()
     private var b: UsersFragmentBinding? = null
     lateinit var adapter: FirestorePagingAdapter<User, Holder>
 
