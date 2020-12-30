@@ -11,4 +11,8 @@ data class LastMessage(
     @ServerTimestamp val tms: Date = Date()
 ) {
     constructor() : this("", "", "")
+
+    companion object Fields {
+        const val TIMESTAMP = "tms"
+    }
 }

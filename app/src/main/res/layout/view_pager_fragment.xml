@@ -33,6 +33,7 @@
                 android:onClick="@{() -> frag.logout()}"
                 android:src="@android:drawable/ic_lock_power_off"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="@string/redCircle"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView

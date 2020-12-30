@@ -1,5 +1,8 @@
 package com.fruitPunchSamurai.firechat.models
 
+import com.fruitPunchSamurai.firechat.models.Message.Types.IMAGE
+import com.fruitPunchSamurai.firechat.models.Message.Types.TEXT
+import com.fruitPunchSamurai.firechat.models.Message.Types.VIDEO
 import com.google.firebase.firestore.ServerTimestamp
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
@@ -15,7 +18,11 @@ data class Message(
 ) {
     constructor() : this("", TEXT, "", "", DateTime.now(DateTimeZone.UTC).toString(), Date())
 
-    companion object Types {
+    companion object Fields {
+        const val TIMESTAMP = "tms"
+    }
+
+    object Types {
         const val TEXT = "text"
         const val IMAGE = "image"
         const val VIDEO = "video"

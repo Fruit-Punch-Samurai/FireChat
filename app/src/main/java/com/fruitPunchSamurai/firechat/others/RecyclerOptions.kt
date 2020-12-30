@@ -7,12 +7,13 @@ import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.fruitPunchSamurai.firechat.models.LastMessage
 import com.fruitPunchSamurai.firechat.models.Message
 import com.fruitPunchSamurai.firechat.models.User
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 object RecyclerOptions {
 
-    private val rootCollection = FirebaseFirestore.getInstance()
+    private val rootCollection = Firebase.firestore
 
     fun getAllUsersPagingOption(lifecycleOwner: LifecycleOwner): FirestorePagingOptions<User> {
         val config = PagedList.Config.Builder()
@@ -23,7 +24,7 @@ object RecyclerOptions {
         return FirestorePagingOptions.Builder<User>()
             .setLifecycleOwner(lifecycleOwner)
             .setQuery(
-                rootCollection.collection("Users").orderBy("name"), config, User::class.java
+                rootCollection.collection("Users").orderBy(User.NAME), config, User::class.java
             ).build()
     }
 
@@ -36,7 +37,7 @@ object RecyclerOptions {
             .setLifecycleOwner(lifecycleOwner)
             .setQuery(
                 rootCollection.collection("Messages").document(userID).collection(receiverID)
-                    .orderBy("tms", Query.Direction.ASCENDING), Message::class.java
+                    .orderBy(Message.TIMESTAMP, Query.Direction.ASCENDING), Message::class.java
             ).build()
 
     fun getLastMessagesOption(
@@ -48,7 +49,8 @@ object RecyclerOptions {
             .setQuery(
                 rootCollection.collection("LastMessages")
                     .document(userID).collection("LastMessages")
-                    .orderBy("tms", Query.Direction.DESCENDING), LastMessage::class.java
+                    .orderBy(LastMessage.TIMESTAMP, Query.Direction.DESCENDING),
+                LastMessage::class.java
             ).build()
 
 }

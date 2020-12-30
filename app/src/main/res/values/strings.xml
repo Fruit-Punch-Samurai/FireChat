@@ -33,6 +33,9 @@
     <string name="unknownUser">Unknown user</string>
     <string name="emailBadlyFormatted">Email address badly formatted</string>
     <string name="loginFailed">Login failed</string>
+    <string name="yourImageMessage">Your image message</string>
+    <string name="redCircle">Red circle</string>
+    <string name="contactImageMessage">Contact\'s image message</string>
     <string name="noImage">No image available</string>
     <string name="wrongPassword">Wrong password, or user does not have a password</string>
     <string name="tooManyFailedLoginAttempts">Sign in blocked due to many failed login attempts, try again later</string>
