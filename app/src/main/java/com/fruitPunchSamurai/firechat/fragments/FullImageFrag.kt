@@ -91,7 +91,7 @@ class FullImageFrag : DialogFragment() {
 
     private fun downloadImage() {
         GlobalScope.launch {
-            val bitmap = vm.getImage(requireContext()) ?: return@launch
+            val bitmap = vm.getImage(requireContext())
             vm.saveImageToStorage(bitmap)
         }
     }

@@ -1,6 +1,5 @@
 package com.fruitPunchSamurai.firechat.viewModels
 
-import android.R.attr.name
 import android.app.Application
 import android.content.ContentValues
 import android.content.Context
@@ -18,6 +17,8 @@ import com.fruitPunchSamurai.firechat.ext.MyAndroidViewModel.getApplicationConte
 import com.fruitPunchSamurai.firechat.ext.MyAndroidViewModel.getString
 import com.fruitPunchSamurai.firechat.others.MyState
 import com.fruitPunchSamurai.firechat.repos.MainRepo
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import java.io.File
 import java.io.FileOutputStream
 
@@ -40,9 +41,14 @@ class FullImageViewModel(application: Application) : AndroidViewModel(applicatio
         return bitmap
     }
 
-    fun saveImageToStorage(bitmap: Bitmap) {
+    fun saveImageToStorage(bitmap: Bitmap?) {
         try {
             state.postValue(MyState.Loading())
+
+            if (bitmap == null) {
+                state.postValue(MyState.Error(getString(R.string.noImage)))
+                return
+            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) saveImageWithMediaStore(bitmap)
             else saveImageToGalleryDirectory(bitmap)
@@ -60,12 +66,9 @@ class FullImageViewModel(application: Application) : AndroidViewModel(applicatio
         val contentValues = ContentValues()
 
         contentValues.run {
-            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$name.jpg")
-            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
-            contentValues.put(
-                MediaStore.MediaColumns.RELATIVE_PATH,
-                getApplicationContext().getExternalFilesDir("${Environment.DIRECTORY_PICTURES}/FireChat")?.path
-            )
+            put(MediaStore.MediaColumns.DISPLAY_NAME, generateFilename())
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/FireChat")
         }
 
         val imageUri: Uri? =
@@ -78,10 +81,12 @@ class FullImageViewModel(application: Application) : AndroidViewModel(applicatio
 
     private fun saveImageToGalleryDirectory(bitmap: Bitmap) {
         val imagesDir =
-            Environment.getExternalStoragePublicDirectory("${Environment.DIRECTORY_PICTURES}/FireChat")
+            Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES + "/FireChat"
+            )
         imagesDir.mkdirs()
 
-        val imageFile = File(imagesDir, "$name.jpg")
+        val imageFile = File(imagesDir, generateFilename())
 
         val fos = FileOutputStream(imageFile)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
@@ -96,4 +101,6 @@ class FullImageViewModel(application: Application) : AndroidViewModel(applicatio
         getApplicationContext().sendBroadcast(mediaScanIntent)
     }
 
+    private fun generateFilename() =
+        LocalDateTime().toString(DateTimeFormat.forPattern("ddMMyyHHmmss")) + ".jpg"
 }
