@@ -10,11 +10,12 @@ import kotlinx.coroutines.tasks.await
 internal class FireMessagesRepo {
 
     private val fire = Firebase.firestore
-    private val messagesColl = fire.collection("Messages")
+    private val messagesColl = fire.collection(MESSAGES_COLL)
     private val lastMessagesColl = fire.collection(LAST_MESSAGES_COLL)
 
     companion object FIELDS {
         const val LAST_MESSAGES_COLL = "LastMessages"
+        const val MESSAGES_COLL = "Messages"
         const val READ =
             "read" //read : Boolean --> defines if the LastMessage has been read or not.
     }
@@ -37,10 +38,9 @@ internal class FireMessagesRepo {
     }
 
     private fun addMessage(message: Message, receiverID: String, pushValue: String) {
-        messagesColl.document(message.ownerID).collection(receiverID).document(pushValue)
-            .set(message)
-
-        messagesColl.document(receiverID).collection(message.ownerID).document(pushValue)
+        messagesColl.document(getPath(message.ownerID, receiverID))
+            .collection(MESSAGES_COLL)
+            .document(pushValue)
             .set(message)
     }
 
@@ -65,4 +65,16 @@ internal class FireMessagesRepo {
             .document(currentUserID).set(lastMessage)
     }
 
+    /* Sorts the users IDs alphabetically to create the path in which the Message will be stored */
+    private fun getPath(currentUserID: String, receiverID: String): String {
+        var path = ""
+
+        ArrayList<String>().apply {
+            add(currentUserID)
+            add(receiverID)
+            sort()
+        }.forEach { path = "$path$it" }
+
+        return path
+    }
 }

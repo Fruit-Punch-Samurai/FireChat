@@ -11,6 +11,10 @@ class FireUsersRepo {
     private val fire = Firebase.firestore
     private val usersColl = fire.collection("Users")
 
+    companion object FIELDS {
+        const val USERS_COLL = "Users"
+    }
+
     suspend fun addUser(user: User) {
         usersColl.document(user.id).set(user).await()
     }
